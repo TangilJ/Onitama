@@ -17,6 +17,7 @@ std::tuple<StateArray, int> nextStatesForBoardMonstrosity(State state, MoveLooku
     StateArray nextStates;
     int nextStateSize = 0;
     Bitboard boardAndCards = state.allPieces[playerIndex];
+    Bitboard enemyPiecesAndCards = state.allPieces[1 - playerIndex];
     Bitboard boardOnly = boardAndCards & boardMask;
 
     // Get all the next states for the entire board for both cards
@@ -32,11 +33,13 @@ std::tuple<StateArray, int> nextStatesForBoardMonstrosity(State state, MoveLooku
                 int cardBitPosition = _bit_scan_forward(boardAndCards ^ lastCard);
 
                 Bitboard cardBit = 1 << cardBitPosition;
-                // Get all the next states for this piece for the current card
-                Bitboard moveMask = allMovesForPiece(boardSquare, boardAndCards & boardMask,
+                lastCard = cardBit;
+
+                Bitboard moveMask = allMovesForPiece(boardSquare, boardOnly,
                                                      lookups[cardBitPosition], playerIndex);
                 Bitboard newCards = boardAndCards & ~boardMask ^ cardBit | (state.kings & ~boardMask);
 
+                // Get all the next states for this piece for the current card
                 Bitboard moveMaskPiecesToGo = moveMask;
                 while (moveMaskPiecesToGo != 0) {
                     Bitboard currentSquare = moveMaskPiecesToGo & -moveMaskPiecesToGo;
@@ -44,15 +47,39 @@ std::tuple<StateArray, int> nextStatesForBoardMonstrosity(State state, MoveLooku
                     if (currentSquare & moveMask) {
                         Bitboard newPieces = boardOnly ^ boardSquare | currentSquare | newCards;
                         nextStates[nextStateSize].allPieces[playerIndex] = newPieces;
-                        nextStates[nextStateSize].allPieces[1 - playerIndex] = state.allPieces[1 - playerIndex];
+                        nextStates[nextStateSize].allPieces[1 - playerIndex] = enemyPiecesAndCards;
                         nextStates[nextStateSize].kings = state.kings & boardMask | cardBit;
                         nextStateSize += 1;
                     }
                 }
-                lastCard = cardBit;
             }
         }
     }
+
+    // If the number of next states is still 0, it means that there are no legal moves for either card
+    // The rule in this situation is to swap a card in the hand for the card on the side
+    if (nextStateSize == 0) {
+        Bitboard kingBit = _bit_scan_forward(state.kings);
+        
+        int card0BitPosition = _bit_scan_forward(boardAndCards);
+        Bitboard card0Bit = 1 << card0BitPosition;
+        Bitboard boardNoCard0 = boardAndCards ^ card0Bit;
+        
+        int card1BitPosition = _bit_scan_forward(boardNoCard0);
+        Bitboard card1Bit = 1 << card1BitPosition;
+        Bitboard boardNoCard1 = boardAndCards ^ card1Bit;
+
+        nextStates[0].allPieces[playerIndex] = boardNoCard0 | kingBit;
+        nextStates[0].allPieces[1 - playerIndex] = enemyPiecesAndCards;
+        nextStates[0].kings = state.kings ^ kingBit | card0Bit;
+
+        nextStates[1].allPieces[playerIndex] = boardNoCard1 | kingBit;
+        nextStates[1].allPieces[1 - playerIndex] = enemyPiecesAndCards;
+        nextStates[1].kings = state.kings ^ kingBit | card1Bit;
+
+        nextStateSize = 2;
+    }
+
     return {nextStates, nextStateSize};
 }
 

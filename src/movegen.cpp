@@ -28,35 +28,32 @@ std::tuple<StateArray, int> nextStatesForBoardMonstrosity(State state, MoveLooku
         boardPiecesToGo ^= pieceSquare;
 
         // Get all the next states for this piece for both cards
-        if (pieceSquare & boardAndCards) {
-            Bitboard lastCard = 0;
-            for (int cardNum = 0; cardNum < 2; ++cardNum) {
-                int cardBitPosition = _bit_scan_forward(boardAndCards ^ lastCard);
+        Bitboard lastCard = 0;
+        for (int cardNum = 0; cardNum < 2; ++cardNum) {
+            int cardBitPosition = _bit_scan_forward(boardAndCards ^ lastCard);
 
-                Bitboard cardBit = 1 << cardBitPosition;
-                lastCard = cardBit;
+            Bitboard cardBit = 1 << cardBitPosition;
+            lastCard = cardBit;
 
-                Bitboard moveMask = allMovesForPiece(pieceSquare, boardOnly,
-                                                     lookups[cardBitPosition], playerIndex);
-                Bitboard newCards = boardAndCards & ~boardMask ^ cardBit | (state.kings & ~boardMask);
-                bool kingIsMoving = pieceSquare & state.kings;
+            Bitboard moveMask = allMovesForPiece(pieceSquare, boardOnly,
+                                                 lookups[cardBitPosition], playerIndex);
+            Bitboard newCards = boardAndCards & ~boardMask ^ cardBit | (state.kings & ~boardMask);
+            bool kingIsMoving = pieceSquare & state.kings;
 
-                // Get all the next states for this piece for the current card
-                Bitboard moveMaskPiecesToGo = moveMask;
-                while (moveMaskPiecesToGo != 0) {
-                    Bitboard moveSquare = moveMaskPiecesToGo & -moveMaskPiecesToGo;
-                    moveMaskPiecesToGo ^= moveSquare;
-                    if (moveSquare & moveMask) {
-                        Bitboard newPieces = boardOnly ^ pieceSquare | moveSquare | newCards;
-                        nextStates[nextStateSize].allPieces[playerIndex] = newPieces;
-                        nextStates[nextStateSize].allPieces[1 - playerIndex] = enemyPiecesAndCards & ~moveSquare;
-                        Bitboard newKings = state.kings & boardMask & ~moveSquare | cardBit;
-                        if (kingIsMoving)
-                            newKings = newKings & ~pieceSquare | moveSquare;
-                        nextStates[nextStateSize].kings = newKings;
-                        nextStateSize += 1;
-                    }
-                }
+            // Get all the next states for this piece for the current card
+            Bitboard moveMaskPiecesToGo = moveMask;
+            while (moveMaskPiecesToGo != 0) {
+                Bitboard moveSquare = moveMaskPiecesToGo & -moveMaskPiecesToGo;
+                moveMaskPiecesToGo ^= moveSquare;
+
+                Bitboard newPieces = boardOnly ^ pieceSquare | moveSquare | newCards;
+                nextStates[nextStateSize].allPieces[playerIndex] = newPieces;
+                nextStates[nextStateSize].allPieces[1 - playerIndex] = enemyPiecesAndCards & ~moveSquare;
+                Bitboard newKings = state.kings & boardMask & ~moveSquare | cardBit;
+                if (kingIsMoving)
+                    newKings = newKings & ~pieceSquare | moveSquare;
+                nextStates[nextStateSize].kings = newKings;
+                nextStateSize += 1;
             }
         }
     }

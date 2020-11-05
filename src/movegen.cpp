@@ -1,4 +1,5 @@
 #include <x86intrin.h>
+#include <tuple>
 #include "movegen.h"
 
 Bitboard allMovesForPiece(Bitboard board, MoveLookup lookup, int playerIndex, int pieceIndex)
@@ -23,11 +24,11 @@ std::tuple<StateArray, int> nextStatesForBoardMonstrosity(State state, MoveLooku
     // Get all the next states for the entire board for both cards
     Bitboard boardPiecesToGo = boardOnly;
     while (boardPiecesToGo != 0) {
-        Bitboard boardSquare = boardPiecesToGo & -boardPiecesToGo;
-        boardPiecesToGo ^= boardSquare;
+        Bitboard pieceSquare = boardPiecesToGo & -boardPiecesToGo;
+        boardPiecesToGo ^= pieceSquare;
 
         // Get all the next states for this piece for both cards
-        if (boardSquare & boardAndCards) {
+        if (pieceSquare & boardAndCards) {
             Bitboard lastCard = 0;
             for (int cardNum = 0; cardNum < 2; ++cardNum) {
                 int cardBitPosition = _bit_scan_forward(boardAndCards ^ lastCard);
@@ -35,20 +36,24 @@ std::tuple<StateArray, int> nextStatesForBoardMonstrosity(State state, MoveLooku
                 Bitboard cardBit = 1 << cardBitPosition;
                 lastCard = cardBit;
 
-                Bitboard moveMask = allMovesForPiece(boardSquare, boardOnly,
+                Bitboard moveMask = allMovesForPiece(pieceSquare, boardOnly,
                                                      lookups[cardBitPosition], playerIndex);
                 Bitboard newCards = boardAndCards & ~boardMask ^ cardBit | (state.kings & ~boardMask);
+                bool kingIsMoving = pieceSquare & state.kings;
 
                 // Get all the next states for this piece for the current card
                 Bitboard moveMaskPiecesToGo = moveMask;
                 while (moveMaskPiecesToGo != 0) {
-                    Bitboard currentSquare = moveMaskPiecesToGo & -moveMaskPiecesToGo;
-                    moveMaskPiecesToGo ^= currentSquare;
-                    if (currentSquare & moveMask) {
-                        Bitboard newPieces = boardOnly ^ boardSquare | currentSquare | newCards;
+                    Bitboard moveSquare = moveMaskPiecesToGo & -moveMaskPiecesToGo;
+                    moveMaskPiecesToGo ^= moveSquare;
+                    if (moveSquare & moveMask) {
+                        Bitboard newPieces = boardOnly ^ pieceSquare | moveSquare | newCards;
                         nextStates[nextStateSize].allPieces[playerIndex] = newPieces;
-                        nextStates[nextStateSize].allPieces[1 - playerIndex] = enemyPiecesAndCards;
-                        nextStates[nextStateSize].kings = state.kings & boardMask | cardBit;
+                        nextStates[nextStateSize].allPieces[1 - playerIndex] = enemyPiecesAndCards & ~moveSquare;
+                        Bitboard newKings = state.kings & boardMask & ~moveSquare | cardBit;
+                        if (kingIsMoving)
+                            newKings = newKings & ~pieceSquare | moveSquare;
+                        nextStates[nextStateSize].kings = newKings;
                         nextStateSize += 1;
                     }
                 }
@@ -60,14 +65,14 @@ std::tuple<StateArray, int> nextStatesForBoardMonstrosity(State state, MoveLooku
     // The rule in this situation is to swap a card in the hand for the card on the side
     if (nextStateSize == 0) {
         Bitboard kingBit = _bit_scan_forward(state.kings);
-        
+
         int card0BitPosition = _bit_scan_forward(boardAndCards);
         Bitboard card0Bit = 1 << card0BitPosition;
-        Bitboard boardNoCard0 = boardAndCards ^ card0Bit;
-        
+        Bitboard boardNoCard0 = boardAndCards ^card0Bit;
+
         int card1BitPosition = _bit_scan_forward(boardNoCard0);
         Bitboard card1Bit = 1 << card1BitPosition;
-        Bitboard boardNoCard1 = boardAndCards ^ card1Bit;
+        Bitboard boardNoCard1 = boardAndCards ^card1Bit;
 
         nextStates[0].allPieces[playerIndex] = boardNoCard0 | kingBit;
         nextStates[0].allPieces[1 - playerIndex] = enemyPiecesAndCards;

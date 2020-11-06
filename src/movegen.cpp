@@ -13,7 +13,7 @@ Bitboard allMovesForPiece(Bitboard piece, Bitboard board, MoveLookup lookup, int
     return allMovesForPiece(board, lookup, playerIndex, index);
 }
 
-std::tuple<StateArray, int> nextStatesForBoardMonstrosity(State state, MoveLookup lookups[], int playerIndex)
+std::tuple<StateArray, int> nextStatesForBoard(State state, MoveLookup *lookups, int playerIndex)
 {
     StateArray nextStates;
     int nextStateSize = 0;

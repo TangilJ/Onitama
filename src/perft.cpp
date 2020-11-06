@@ -15,7 +15,7 @@ unsigned long perft(State state, int depth, int playerIndex)
     if (checkWinCondition(state) != -1)
         return 1;
 
-    const std::tuple<StateArray, int> &tuple = nextStatesForBoardMonstrosity(state, lookups, playerIndex);
+    const std::tuple<StateArray, int> &tuple = nextStatesForBoard(state, lookups, playerIndex);
     const StateArray &array = std::get<0>(tuple);
     const int &stateSize = std::get<1>(tuple);
 

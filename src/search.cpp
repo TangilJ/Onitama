@@ -20,7 +20,7 @@ SearchValue Negamax(State state, MoveLookup lookups[], int depth, int color, boo
         return searchValue;
     }
 
-    const std::tuple<StateArray, int> &moves = nextStatesForBoardMonstrosity(state, lookups, color);
+    const std::tuple<StateArray, int> &moves = nextStatesForBoard(state, lookups, color);
     const StateArray &array = std::get<0>(moves);
     const int &stateSize = std::get<1>(moves);
 

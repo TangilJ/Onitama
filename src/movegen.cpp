@@ -13,6 +13,25 @@ Bitboard allMovesForPiece(Bitboard piece, Bitboard board, MoveLookup lookup, int
     return allMovesForPiece(board, lookup, playerIndex, index);
 }
 
+Bitboard allMovesForBoard(Bitboard board, MoveLookup lookup, int playerIndex)
+{
+    Bitboard boardPiecesToGo = board & ~boardMask;
+    Bitboard moves = 0;
+    while (boardPiecesToGo != 0) {
+        Bitboard boardSquare = boardPiecesToGo & -boardPiecesToGo;
+        boardPiecesToGo ^= boardSquare;
+        // We're rewriting the same code as allMovesForPiece instead of using the function since
+        // we only want to do ~board at the very end instead of every time we do a lookup.
+        // This is purely for performance reasons.
+        // TODO: Check if this actually makes a difference.
+        int index = 31 - _bit_scan_forward(boardSquare);
+        moves |= lookup[playerIndex][index];
+    }
+    moves &= ~board;
+
+    return moves;
+}
+
 std::tuple<StateArray, int> nextStatesForBoard(State state, MoveLookup *lookups, int playerIndex)
 {
     StateArray nextStates;

@@ -14,4 +14,6 @@ add_executable(
         src/movegen.h
         src/utilities.cpp
         src/utilities.h
+        src/search.cpp
+        src/search.h
 )

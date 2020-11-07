@@ -4,7 +4,7 @@
 #include <iostream>
 #include "main.h"
 
-// Red is element 0, blue is element 1
+// Blue is element 0, red is element 1
 
 constexpr MoveLookup oxMoves = {
     {

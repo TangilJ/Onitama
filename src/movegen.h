@@ -3,9 +3,9 @@
 
 #include "main.h"
 
-Bitboard allMovesForPiece(Bitboard board, MoveLookup lookup, int playerIndex, int pieceIndex);
+Bitboard allMovesForPiece(Bitboard board, MoveLookup &lookup, int playerIndex, int pieceIndex);
 
-Bitboard allMovesForPiece(Bitboard piece, Bitboard board, MoveLookup lookup, int playerIndex);
+Bitboard allMovesForPiece(Bitboard piece, Bitboard board, MoveLookup &lookup, int playerIndex);
 
 Bitboard allMovesForBoard(Bitboard board, MoveLookup lookup, int playerIndex);
 

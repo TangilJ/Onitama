@@ -1,18 +1,18 @@
 #include <x86intrin.h>
 #include "movegen.h"
 
-Bitboard allMovesForPiece(Bitboard board, MoveLookup lookup, int playerIndex, int pieceIndex)
+Bitboard allMovesForPiece(Bitboard board, MoveLookup &lookup, int playerIndex, int pieceIndex)
 {
     return lookup[playerIndex][pieceIndex] & ~board;
 }
 
-Bitboard allMovesForPiece(Bitboard piece, Bitboard board, MoveLookup lookup, int playerIndex)
+Bitboard allMovesForPiece(Bitboard piece, Bitboard board, MoveLookup &lookup, int playerIndex)
 {
     int index = 31 - _bit_scan_forward(piece);
     return allMovesForPiece(board, lookup, playerIndex, index);
 }
 
-Bitboard allMovesForBoard(Bitboard board, MoveLookup lookup, int playerIndex)
+Bitboard allMovesForBoard(Bitboard board, MoveLookup &lookup, int playerIndex)
 {
     Bitboard boardPiecesToGo = board & ~boardMask;
     Bitboard moves = 0;

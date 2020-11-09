@@ -1,5 +1,4 @@
 #include <x86intrin.h>
-#include <tuple>
 #include <cmath>
 #include "search.h"
 #include "movegen.h"
@@ -20,9 +19,8 @@ SearchValue Negamax(State state, MoveLookup lookups[], int depth, int color, boo
         return searchValue;
     }
 
-    const std::tuple<StateArray, int> &moves = nextStatesForBoard(state, lookups, color);
-    const StateArray &array = std::get<0>(moves);
-    const int &stateSize = std::get<1>(moves);
+    StateArray array;
+    int stateSize = nextStatesForBoard(state, lookups, color, array);
 
     float bestValue = -INFINITY;
     State bestState;

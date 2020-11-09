@@ -9,7 +9,7 @@ Bitboard allMovesForPiece(Bitboard piece, Bitboard board, MoveLookup lookup, int
 
 Bitboard allMovesForBoard(Bitboard board, MoveLookup lookup, int playerIndex);
 
-std::tuple<StateArray, int> nextStatesForBoard(State state, MoveLookup *lookups, int playerIndex);
+int nextStatesForBoard(State state, MoveLookup *lookups, int playerIndex, StateArray &nextStates);
 
 int checkWinCondition(State state);
 

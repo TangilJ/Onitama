@@ -1,5 +1,4 @@
 #include <x86intrin.h>
-#include <tuple>
 #include "movegen.h"
 
 Bitboard allMovesForPiece(Bitboard board, MoveLookup lookup, int playerIndex, int pieceIndex)
@@ -32,9 +31,8 @@ Bitboard allMovesForBoard(Bitboard board, MoveLookup lookup, int playerIndex)
     return moves;
 }
 
-std::tuple<StateArray, int> nextStatesForBoard(State state, MoveLookup *lookups, int playerIndex)
+int nextStatesForBoard(State state, MoveLookup *lookups, int playerIndex, StateArray &nextStates)
 {
-    StateArray nextStates;
     int nextStateSize = 0;
     Bitboard boardAndCards = state.allPieces[playerIndex];
     Bitboard enemyPiecesAndCards = state.allPieces[1 - playerIndex];
@@ -101,7 +99,7 @@ std::tuple<StateArray, int> nextStatesForBoard(State state, MoveLookup *lookups,
         nextStateSize = 2;
     }
 
-    return {nextStates, nextStateSize};
+    return nextStateSize;
 }
 
 // 0 = p0 win, 1 = p1 win, -1 = game has not ended

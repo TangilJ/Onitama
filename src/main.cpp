@@ -1,13 +1,8 @@
-#pragma ide diagnostic ignored "hicpp-signed-bitwise"
-
 #include <map>
-
 #include <bitset>
 #include "main.h"
 #include "data.h"
 #include "perft.h"
-#include "utilities.h"
-#include "movegen.h"
 
 std::map<std::string, MoveLookup> cardMap = {
     {"ox",       oxMoves},

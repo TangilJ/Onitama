@@ -10,11 +10,11 @@
 #include "movegen.h"
 
 std::map<std::string, MoveLookup> cardMap = {
-        {"ox",       oxMoves},
-        {"boar",     boarMoves},
-        {"horse",    horseMoves},
-        {"elephant", elephantMoves},
-        {"crab",     crabMoves}
+    {"ox",       oxMoves},
+    {"boar",     boarMoves},
+    {"horse",    horseMoves},
+    {"elephant", elephantMoves},
+    {"crab",     crabMoves}
 };
 
 
@@ -26,6 +26,9 @@ int main()
 
     State startState = {{startingBoardP0, startingBoardP1}, startingBoardKings};
     printIncreasingPerftSpeed(startState, 8, 0);
+
+    std::cout << "Finished. Press enter to exit." << std::endl;
+    getchar();
 
     return 0;
 }

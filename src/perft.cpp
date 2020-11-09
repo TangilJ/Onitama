@@ -6,7 +6,7 @@
 
 MoveLookup lookups[5] = {oxMoves, boarMoves, horseMoves, elephantMoves, crabMoves};
 
-unsigned long perft(State state, int depth, int playerIndex)
+unsigned long long perft(State state, int depth, int playerIndex, bool start = false)
 {
     if (depth == 0)
         return 1;
@@ -16,7 +16,7 @@ unsigned long perft(State state, int depth, int playerIndex)
     StateArray array;
     int stateSize = nextStatesForBoard(state, lookups, playerIndex, array);
 
-    unsigned long total = 0;
+    unsigned long long total = 0;
 
     for (int i = 0; i < stateSize; ++i) {
         total += perft(array[i], depth - 1, 1 - playerIndex);
@@ -34,9 +34,9 @@ void printIncreasingPerftSpeed(State state, int depth, int playerIndex)
 void printPerftSpeed(State state, int depth, int playerIndex)
 {
     std::clock_t start = std::clock();
-    unsigned long total = perft(state, depth, playerIndex);
+    unsigned long long total = perft(state, depth, playerIndex, true);
     double duration = (std::clock() - start) / (double) CLOCKS_PER_SEC;
     double speed = (double) total / duration / 1000000;
-    printf("Depth %i (%10lu nodes) took %.5ssec = (%.5s Mnodes/sec)\n", depth, total,
+    printf("Depth %i (%10llu nodes) took %.5ssec = (%.5s Mnodes/sec)\n", depth, total,
            std::to_string(duration).c_str(), std::to_string(speed).c_str());
 }

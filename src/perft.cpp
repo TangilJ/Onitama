@@ -16,7 +16,7 @@ unsigned long perft(State state, int depth, int playerIndex)
     StateArray array;
     int stateSize = nextStatesForBoard(state, lookups, playerIndex, array);
 
-    int total = 0;
+    unsigned long total = 0;
 
     for (int i = 0; i < stateSize; ++i) {
         total += perft(array[i], depth - 1, 1 - playerIndex);

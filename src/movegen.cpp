@@ -1,4 +1,4 @@
-#include <x86intrin.h>
+#include <intrin.h>
 #include "movegen.h"
 
 Bitboard allMovesForPiece(Bitboard board, MoveLookup &lookup, int playerIndex, int pieceIndex)

@@ -1,5 +1,5 @@
 #include <bitset>
-#include <x86intrin.h>
+#include <intrin.h>
 #include "main.h"
 #include "utilities.h"
 

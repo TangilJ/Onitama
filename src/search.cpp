@@ -1,4 +1,4 @@
-#include <x86intrin.h>
+#include <intrin.h>
 #include <cmath>
 #include "search.h"
 #include "movegen.h"

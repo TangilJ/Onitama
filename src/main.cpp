@@ -22,8 +22,9 @@ int main()
     State startState = {{startingBoardP0, startingBoardP1}, startingBoardKings};
     printIncreasingPerftSpeed(startState, 8, 0);
 
+#ifndef _DEBUG
     std::cout << "Finished. Press enter to exit." << std::endl;
     getchar();
-
+#endif
     return 0;
 }

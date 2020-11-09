@@ -16,6 +16,6 @@ struct State {
     Bitboard kings;
 };
 using MoveLookup = std::array<std::array<Bitboard, 25>, 2>;
-using StateArray = std::array<State, 100>;
+using StateArray = std::array<State, 40>;
 
 #endif //ONITAMA_MAIN_H

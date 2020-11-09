@@ -9,6 +9,8 @@ constexpr Bitboard firstSquare = 0b10000000000000000000000000000000;
 constexpr Bitboard boardMask = 0b11111111111111111111111110000000;
 constexpr Bitboard centerSquares = 0b00000011100111001110000000000000;
 constexpr Bitboard centralSquare = 0b00000000000010000000000000000000;
+constexpr Bitboard blueStartingSquare = 0b00100000000000000000000000000000;
+constexpr Bitboard redStartingSquare = 0b00000000000000000000001000000000;
 
 struct State {
     // Element 0 is blue, element 1 is red

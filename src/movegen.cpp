@@ -16,7 +16,7 @@ Bitboard allMovesForBoard(Bitboard board, MoveLookup &lookup, int playerIndex)
 {
     Bitboard boardPiecesToGo = board & ~boardMask;
     Bitboard moves = 0;
-    while (boardPiecesToGo != 0) {
+    while (boardPiecesToGo) {
         Bitboard boardSquare = boardPiecesToGo & -boardPiecesToGo;
         boardPiecesToGo ^= boardSquare;
         // We're rewriting the same code as allMovesForPiece instead of using the function since
@@ -40,7 +40,7 @@ int nextStatesForBoard(State state, MoveLookup *lookups, int playerIndex, StateA
 
     // Get all the next states for the entire board for both cards
     Bitboard boardPiecesToGo = boardOnly;
-    while (boardPiecesToGo != 0) {
+    while (boardPiecesToGo) {
         Bitboard pieceSquare = boardPiecesToGo & -boardPiecesToGo;
         boardPiecesToGo ^= pieceSquare;
 
@@ -59,7 +59,7 @@ int nextStatesForBoard(State state, MoveLookup *lookups, int playerIndex, StateA
 
             // Get all the next states for this piece for the current card
             Bitboard moveMaskPiecesToGo = moveMask;
-            while (moveMaskPiecesToGo != 0) {
+            while (moveMaskPiecesToGo) {
                 Bitboard moveSquare = moveMaskPiecesToGo & -moveMaskPiecesToGo;
                 moveMaskPiecesToGo ^= moveSquare;
 

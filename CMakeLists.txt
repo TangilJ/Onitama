@@ -25,3 +25,6 @@ add_executable(
         src/search.cpp
         src/search.h
 )
+
+add_subdirectory(extern/CLI11)
+target_link_libraries(Onitama CLI11::CLI11)

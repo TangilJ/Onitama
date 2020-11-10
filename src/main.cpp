@@ -27,11 +27,13 @@ std::string serverMatchId;
 
 void perftCommand()
 {
+    printf("Running perft with depth %i\n\n", depth);
+    
     if (cards.size() != 5)
         cards = {"ox", "boar", "horse", "elephant", "crab"};
     MoveLookup lookupsArray[5];
     getLookupsFromNames(cards, lookupsArray);
-    
+
     State state = {
         {blueStartingBoard, redStartingBoard},
         kingsStartingBoard
@@ -67,7 +69,7 @@ int main(int argc, char **argv)
         ->ignore_case();
     selfPlay->add_option(
         "-c,--cards", cards,
-        "The 5 cards to be used in a selfplay game in order of: blue1, blue2, red1, red2, side "
+        "The 5 cards to be used in a self-play game in order of: blue1, blue2, red1, red2, side "
         "(e.g. ox, boar, elephant, horse, crab). "
         "Leave this option out for random cards."
     )->ignore_case()->expected(5)->check(cardNameValidator);

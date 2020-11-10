@@ -1,5 +1,6 @@
 #include <ctime>
 #include <string>
+#include <execution>
 #include "data.h"
 #include "perft.h"
 #include "movegen.h"
@@ -18,9 +19,15 @@ unsigned long long perft(State state, int depth, int playerIndex, bool start = f
 
     unsigned long long total = 0;
 
-    for (int i = 0; i < stateSize; ++i) {
-        total += perft(array[i], depth - 1, 1 - playerIndex);
-    }
+    // TODO: Currently spawns a thread per state in the starting ply. Should instead spawn a certain number of max states.
+    if (start)
+        std::for_each(std::execution::par, array.begin(), array.begin() + stateSize, [&](State item) mutable {
+            total += perft(item, depth - 1, 1 - playerIndex);
+        });
+    else
+        for (int i = 0; i < stateSize; ++i) {
+            total += perft(array[i], depth - 1, 1 - playerIndex);
+        }
 
     return total;
 }

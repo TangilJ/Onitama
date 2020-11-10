@@ -1,7 +1,7 @@
 #include <bitset>
 #include <intrin.h>
-#include "main.h"
 #include "utilities.h"
+#include "data.h"
 
 void printBits(Bitboard board)
 {
@@ -47,4 +47,17 @@ void printBoard(State state)
 void printBoard(Bitboard board)
 {
     printBoard({board, 0, 0});
+}
+
+std::array<MoveLookup, 5> getLookupsFromNames(const std::array<std::string, 5> &names)
+{
+    std::array<MoveLookup, 5> lookups{};
+    for (int i = 0; i < 5; ++i) {
+        if (cardMap.find(names[i]) == cardMap.end())
+            lookups[i] = cardMap.at(names[i]);
+        else
+            throw std::invalid_argument("Name not found in cardMap");
+    }
+
+    return lookups;
 }

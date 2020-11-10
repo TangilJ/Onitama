@@ -2,6 +2,7 @@
 #define ONITAMA_DATA_H
 
 #include <iostream>
+#include <map>
 #include "main.h"
 
 // Blue is element 0, red is element 1
@@ -950,5 +951,23 @@ constexpr MoveLookup eelMoves = {
     }
 };
 
+const std::map<std::string, MoveLookup> cardMap = {
+    {"rabbit",   rabbitMoves},
+    {"cobra",    cobraMoves},
+    {"rooster",  roosterMoves},
+    {"tiger",    tigerMoves},
+    {"monkey",   monkeyMoves},
+    {"crab",     crabMoves},
+    {"crane",    craneMoves},
+    {"frog",     frogMoves},
+    {"boar",     boarMoves},
+    {"horse",    horseMoves},
+    {"elephant", elephantMoves},
+    {"ox",       oxMoves},
+    {"goose",    gooseMoves},
+    {"dragon",   dragonMoves},
+    {"mantis",   mantisMoves},
+    {"eel",      eelMoves}
+};
 
 #endif

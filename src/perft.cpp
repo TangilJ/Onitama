@@ -1,13 +1,12 @@
 #include <ctime>
 #include <string>
-#include <execution>
+//#include <execution>
 #include "data.h"
 #include "perft.h"
 #include "movegen.h"
 
-MoveLookup lookups[5] = {oxMoves, boarMoves, horseMoves, elephantMoves, crabMoves};
 
-unsigned long long perft(State state, int depth, int playerIndex, bool start = false)
+unsigned long long perft(State state, int depth, int playerIndex, MoveLookup *lookups, bool start = false)
 {
     if (depth == 0)
         return 1;
@@ -32,16 +31,16 @@ unsigned long long perft(State state, int depth, int playerIndex, bool start = f
     return total;
 }
 
-void printIncreasingPerftSpeed(State state, int depth, int playerIndex)
+void printIncreasingPerftSpeed(State state, int depth, int playerIndex, MoveLookup *lookups)
 {
     for (int i = 1; i < depth + 1; ++i)
-        printPerftSpeed(state, i, playerIndex);
+        printPerftSpeed(state, i, playerIndex, lookups);
 }
 
-void printPerftSpeed(State state, int depth, int playerIndex)
+void printPerftSpeed(State state, int depth, int playerIndex, MoveLookup *lookups)
 {
     std::clock_t start = std::clock();
-    unsigned long long total = perft(state, depth, playerIndex, true);
+    unsigned long long total = perft(state, depth, playerIndex, lookups, true);
     double duration = (std::clock() - start) / (double) CLOCKS_PER_SEC;
     double speed = (double) total / duration / 1000000;
     printf("Depth %i (%10llu nodes) took %.5ssec = (%.5s Mnodes/sec)\n", depth, total,

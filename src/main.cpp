@@ -2,6 +2,8 @@
 #include "main.h"
 #include "data.h"
 #include "perft.h"
+#include "utilities.h"
+
 
 struct CardNameValidator : public CLI::Validator {
     CardNameValidator()
@@ -19,14 +21,32 @@ const static CardNameValidator cardNameValidator;
 
 std::vector<std::string> cards;
 int perftDepth = 1;
-bool increasingPerft {false};
+bool increasingPerft{false};
 std::string serverMatchId;
+
+
+void perftCommand()
+{
+    if (cards.size() != 5)
+        cards = {"ox", "boar", "horse", "elephant", "crab"};
+    std::array<MoveLookup, 5> lookups = getLookupsFromNames(cards);
+    State state = {
+        {blueStartingBoard, redStartingBoard},
+        kingsStartingBoard
+    };
+    MoveLookup lookupsArray[5] = {lookups[0], lookups[1], lookups[2], lookups[3], lookups[4]};
+
+    if (increasingPerft)
+        printIncreasingPerftSpeed(state, perftDepth, 0, lookupsArray);
+    else
+        printPerftSpeed(state, perftDepth, 0, lookupsArray);
+}
 
 int main(int argc, char **argv)
 {
     CLI::App app;
-
     app.require_subcommand(0, 1);
+
 
     CLI::App *perftSubcommand = app.add_subcommand(
             "perft",
@@ -39,6 +59,8 @@ int main(int argc, char **argv)
         "The 5 cards to be used in a selfplay game in order of: blue1, blue2, red1, red2, side. "
         "Defaults to blue = ox, boar, red = horse, elephant, side = crab."
     )->ignore_case()->expected(5)->check(cardNameValidator);
+    perftSubcommand->callback(perftCommand);
+
 
     CLI::App *selfPlay = app.add_subcommand("self", "Make the AI play against itself.")
         ->ignore_case();
@@ -49,6 +71,7 @@ int main(int argc, char **argv)
         "Leave this option out for random cards."
     )->ignore_case()->expected(5)->check(cardNameValidator);
 
+
     CLI::App *againstHuman = app.add_subcommand("human", "Make the AI play against a human.")
         ->ignore_case();
     againstHuman->add_option(
@@ -57,6 +80,7 @@ int main(int argc, char **argv)
         "(e.g. ox, boar, elephant, horse, crab). "
         "Leave this option out for random cards."
     )->ignore_case()->expected(5)->check(cardNameValidator);
+
 
     CLI::App *litamaServer = app.add_subcommand("server", "Make the AI play on the Litama server.")
         ->ignore_case();
@@ -68,6 +92,7 @@ int main(int argc, char **argv)
 
     app.footer("Run --help on a subcommand to see its options.\n"
                "Onitama engine written in C++ by Redox.");
+
 
     CLI11_PARSE(app, argc, argv);
 

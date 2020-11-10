@@ -21,11 +21,11 @@ unsigned long long perft(State state, int depth, int playerIndex, MoveLookup *lo
     // TODO: Currently spawns a thread per state in the starting ply. Should instead spawn a certain number of max states.
     if (start)
         std::for_each(std::execution::par, array.begin(), array.begin() + stateSize, [&](State item) mutable {
-            total += perft(item, depth - 1, 1 - playerIndex);
+            total += perft(item, depth - 1, 1 - playerIndex, lookups);
         });
     else
         for (int i = 0; i < stateSize; ++i) {
-            total += perft(array[i], depth - 1, 1 - playerIndex);
+            total += perft(array[i], depth - 1, 1 - playerIndex, lookups);
         }
 
     return total;

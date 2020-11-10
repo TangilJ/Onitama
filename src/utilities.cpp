@@ -1,3 +1,4 @@
+#include <cstdlib>
 #include <bitset>
 #include <intrin.h>
 #include <vector>
@@ -57,5 +58,29 @@ void getLookupsFromNames(std::vector<std::string> names, MoveLookup *lookups)
             lookups[i] = cardMap.at(names[i]);
         else
             throw std::invalid_argument("Name not found in cardMap");
+    }
+}
+
+void getRandomCards(MoveLookup *lookups)
+{
+
+    std::vector<int> indices;
+    while (indices.size() != 5)
+    {
+        int i = rand() % 16;
+        if (std::find(indices.begin(), indices.end(), i) == indices.end())
+            indices.push_back(i);
+    }
+
+    int nameIndex = 0;
+    int lookupsIndex = 0;
+    for (const auto& name : cardMap)
+    {
+        if (std::find(indices.begin(), indices.end(), nameIndex) != indices.end())
+        {
+            lookups[lookupsIndex] = cardMap.at(name.first);
+            lookupsIndex++;
+        }
+        nameIndex++;
     }
 }

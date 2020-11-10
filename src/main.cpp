@@ -3,6 +3,8 @@
 #include "data.h"
 #include "perft.h"
 #include "utilities.h"
+#include "movegen.h"
+#include "search.h"
 
 
 struct CardNameValidator : public CLI::Validator {
@@ -28,7 +30,7 @@ std::string serverMatchId;
 void perftCommand()
 {
     printf("Running perft with depth %i\n\n", depth);
-    
+
     if (cards.size() != 5)
         cards = {"ox", "boar", "horse", "elephant", "crab"};
     MoveLookup lookupsArray[5];
@@ -43,6 +45,39 @@ void perftCommand()
         printIncreasingPerftSpeed(state, depth, 0, lookupsArray);
     else
         printPerftSpeed(state, depth, 0, lookupsArray);
+}
+
+void selfPlayCommand()
+{
+    MoveLookup lookups[5];
+    if (cards.size() != 5)
+        getRandomCards(lookups);
+    else
+        getLookupsFromNames(cards, lookups);
+
+    State state = {
+        {blueStartingBoard, redStartingBoard},
+        kingsStartingBoard
+    };
+
+    printf("Running self-play with negamax with alpha-beta pruning on depth %i\n\n", depth);
+
+    puts("Ply 0");
+    printBoard(state);
+    puts("");
+
+    int color = 0;
+    int ply = 0;
+    while (checkWinCondition(state) == -1) {
+        const SearchValue &negamax = negamaxWithAbPruning(state, lookups, -INFINITY, INFINITY, depth, color, true);
+        state = negamax.state;
+        color = 1 - color;
+        ply++;
+
+        printf("Ply %i\n", ply);
+        printBoard(state);
+        printf("Evaluation: %.2f\n\n", negamax.value);
+    }
 }
 
 int main(int argc, char **argv)
@@ -73,6 +108,8 @@ int main(int argc, char **argv)
         "(e.g. ox, boar, elephant, horse, crab). "
         "Leave this option out for random cards."
     )->ignore_case()->expected(5)->check(cardNameValidator);
+    selfPlay->add_option("-d,--depth", depth, "The number of plies that the negamax algorithm will look ahead.", true);
+    selfPlay->callback(selfPlayCommand);
 
 
     CLI::App *againstHuman = app.add_subcommand("human", "Make the AI play against a human.")

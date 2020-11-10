@@ -11,4 +11,6 @@ void printBoard(Bitboard board);
 
 void getLookupsFromNames(std::vector<std::string> names, MoveLookup *lookups);
 
+void getRandomCards(MoveLookup *lookups);
+
 #endif //ONITAMA_UTILITIES_H

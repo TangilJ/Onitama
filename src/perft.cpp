@@ -1,6 +1,6 @@
 #include <ctime>
 #include <string>
-//#include <execution>
+#include <execution>
 #include "data.h"
 #include "perft.h"
 #include "movegen.h"

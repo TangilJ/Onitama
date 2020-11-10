@@ -56,7 +56,7 @@ int main(int argc, char **argv)
     perftSubcommand->add_flag("-i,--increasing", increasingPerft, "Make the perft increase depth-by-depth to the given depth.");
     perftSubcommand->add_option(
         "-c,--cards", cards,
-        "The 5 cards to be used in a selfplay game in order of: blue1, blue2, red1, red2, side. "
+        "The 5 cards to be used in perft in order of: blue1, blue2, red1, red2, side. "
         "Defaults to blue = ox, boar, red = horse, elephant, side = crab."
     )->ignore_case()->expected(5)->check(cardNameValidator);
     perftSubcommand->callback(perftCommand);

@@ -1,16 +1,6 @@
-#include <map>
-#include <bitset>
 #include "main.h"
 #include "data.h"
 #include "perft.h"
-
-std::map<std::string, MoveLookup> cardMap = {
-    {"ox",       oxMoves},
-    {"boar",     boarMoves},
-    {"horse",    horseMoves},
-    {"elephant", elephantMoves},
-    {"crab",     crabMoves}
-};
 
 
 int main()

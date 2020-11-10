@@ -20,7 +20,7 @@ struct CardNameValidator : public CLI::Validator {
 const static CardNameValidator cardNameValidator;
 
 std::vector<std::string> cards;
-int perftDepth = 1;
+int depth = 1;
 bool increasingPerft{false};
 std::string serverMatchId;
 
@@ -29,17 +29,18 @@ void perftCommand()
 {
     if (cards.size() != 5)
         cards = {"ox", "boar", "horse", "elephant", "crab"};
-    std::array<MoveLookup, 5> lookups = getLookupsFromNames(cards);
+    MoveLookup lookupsArray[5];
+    getLookupsFromNames(cards, lookupsArray);
+    
     State state = {
         {blueStartingBoard, redStartingBoard},
         kingsStartingBoard
     };
-    MoveLookup lookupsArray[5] = {lookups[0], lookups[1], lookups[2], lookups[3], lookups[4]};
 
     if (increasingPerft)
-        printIncreasingPerftSpeed(state, perftDepth, 0, lookupsArray);
+        printIncreasingPerftSpeed(state, depth, 0, lookupsArray);
     else
-        printPerftSpeed(state, perftDepth, 0, lookupsArray);
+        printPerftSpeed(state, depth, 0, lookupsArray);
 }
 
 int main(int argc, char **argv)
@@ -52,7 +53,7 @@ int main(int argc, char **argv)
             "perft",
             "Run a parallelised perft (performance test).")
         ->ignore_case();
-    perftSubcommand->add_option("-d,--depth", perftDepth, "Perft depth.", true);
+    perftSubcommand->add_option("-d,--depth", depth, "Perft depth.", true);
     perftSubcommand->add_flag("-i,--increasing", increasingPerft, "Make the perft increase depth-by-depth to the given depth.");
     perftSubcommand->add_option(
         "-c,--cards", cards,

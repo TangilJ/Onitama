@@ -9,6 +9,6 @@ void printBoard(State state);
 
 void printBoard(Bitboard board);
 
-std::array<MoveLookup, 5> getLookupsFromNames(std::vector<std::string> names);
+void getLookupsFromNames(std::vector<std::string> names, MoveLookup *lookups);
 
 #endif //ONITAMA_UTILITIES_H

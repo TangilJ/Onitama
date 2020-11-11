@@ -33,3 +33,5 @@ target_link_libraries(Onitama CLI11::CLI11)
 
 add_subdirectory(extern/json)
 target_link_libraries(Onitama nlohmann_json::nlohmann_json)
+
+target_include_directories(Onitama PRIVATE extern/easywsclient)

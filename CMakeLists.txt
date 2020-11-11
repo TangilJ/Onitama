@@ -30,3 +30,6 @@ add_executable(
 
 add_subdirectory(extern/CLI11)
 target_link_libraries(Onitama CLI11::CLI11)
+
+add_subdirectory(extern/json)
+target_link_libraries(Onitama nlohmann_json::nlohmann_json)

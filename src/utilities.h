@@ -13,4 +13,8 @@ void getLookupsFromNames(std::vector<std::string> names, MoveLookup *lookups);
 
 void getRandomCards(MoveLookup *lookups);
 
+void getStateFromServerString(const std::string &string, State &state);
+
+std::string serverMoveStringFromStates(State first, State second, std::vector<std::string> names);
+
 #endif //ONITAMA_UTILITIES_H

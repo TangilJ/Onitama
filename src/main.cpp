@@ -1,4 +1,14 @@
 #include <CLI/CLI.hpp>
+#include <nlohmann/json.hpp>
+
+#ifdef _WIN32
+#pragma comment( lib, "ws2_32" )
+
+#include <WinSock2.h>
+
+#endif
+
+#include <easywsclient.hpp>
 #include "main.h"
 #include "data.h"
 #include "perft.h"
@@ -6,6 +16,8 @@
 #include "movegen.h"
 #include "search.h"
 
+using easywsclient::WebSocket;
+using json = nlohmann::json;
 
 struct CardNameValidator : public CLI::Validator {
     CardNameValidator()
@@ -21,10 +33,13 @@ struct CardNameValidator : public CLI::Validator {
 
 const static CardNameValidator cardNameValidator;
 
-std::vector<std::string> cards;
+std::vector<std::string> cards = {"", "", "", "", ""};
 int depth = 1;
 bool increasingPerft{false};
+bool serverCreateMatch{false};
+bool localServerUrl{false};
 std::string serverMatchId;
+std::string serverUrl = "ws://litama.herokuapp.com";
 
 
 void perftCommand()
@@ -80,6 +95,111 @@ void selfPlayCommand()
     }
 }
 
+void processJsonState(json j, MoveLookup *lookups, State &state, int &turn)
+{
+    turn = j.at("currentTurn") == "blue" ? 0 : 1;
+    getStateFromServerString(j.at("board"), state);
+    cards = {
+        j.at("cards").at("blue")[0],
+        j.at("cards").at("blue")[1],
+        j.at("cards").at("red")[0],
+        j.at("cards").at("red")[1],
+        j.at("cards").at("side")
+    };
+    getLookupsFromNames(cards, lookups);
+}
+
+void serverCommand()
+{
+#ifdef _WIN32
+    INT rc;
+    WSADATA wsaData;
+
+    rc = WSAStartup(MAKEWORD(2, 2), &wsaData);
+    if (rc) {
+        printf("WSAStartup Failed.\n");
+        return;
+    }
+#endif
+
+    if (localServerUrl)
+        serverUrl = "ws://127.0.0.1:5000";
+
+    std::unique_ptr<WebSocket> ws(WebSocket::from_url(serverUrl));
+
+    std::string token;
+    int color;
+    int turn = -1;
+    State state{};
+    MoveLookup lookups[5];
+
+    if (serverCreateMatch) {
+        ws->send("create");
+        puts("Sent: create");
+    } else if (!serverMatchId.empty()) {
+        ws->send("join " + serverMatchId);
+        printf("Sent: join %s", serverMatchId.c_str());
+    } else {
+        puts("Did not enter any options for server subcommand. Type 'Onitama.exe server --help' to see options.");
+        return;
+    }
+
+    while (ws->getReadyState() != WebSocket::CLOSED) {
+        ws->poll();
+        json data;
+        ws->dispatch([&](const std::string &message) {
+            data = json::parse(message);
+        });
+
+        if (data.find("token") == data.end())
+            continue;
+
+        std::cout << "Received: " << std::setw(4) << data << std::endl << std::endl;
+        serverMatchId = data.at("matchId");
+        token = data.at("token");
+        color = data.at("color") == "blue" ? 0 : 1;
+        break;
+    }
+
+    ws->send("spectate " + serverMatchId);
+    while (ws->getReadyState() != WebSocket::CLOSED) {
+        if (color == turn) {
+            const SearchValue &search = negamaxWithAbPruning(state, lookups, -INFINITY, INFINITY, depth, color, true);
+            puts("Sending board:");
+            printBoard(search.state);
+            printf("Evaluation: %f\n", search.value);
+            std::string serverMove = serverMoveStringFromStates(state, search.state, cards);
+            std::string sentCommand = "move " + serverMatchId + " " + token + " " + serverMove;
+            printf("Sent: %s\n\n", sentCommand.c_str());
+            ws->send(sentCommand);
+            turn = -1;
+        }
+
+        ws->poll();
+        json data;
+        ws->dispatch([&](const std::string &message) {
+            data = json::parse(message);
+        });
+
+        if (data.find("messageType") == data.end())
+            continue;
+
+        std::cout << "Received: " << std::setw(4) << data << std::endl << std::endl;
+
+        if (data.at("messageType") == "state")
+            if (data.at("gameState") != "waiting for player") {
+                processJsonState(data, lookups, state, turn);
+                puts("Current board:");
+                printBoard(state);
+                std::cout << std::endl;
+            }
+    }
+
+#ifdef _WIN32
+    WSACleanup();
+#endif
+}
+
 int main(int argc, char **argv)
 {
     CLI::App app;
@@ -124,10 +244,22 @@ int main(int argc, char **argv)
 
     CLI::App *litamaServer = app.add_subcommand("server", "Make the AI play on the Litama server.")
         ->ignore_case();
+    litamaServer->require_option(1, 3);
+    litamaServer->add_option("-d,--depth", depth, "The number of plies to look ahead when playing on the server.", true);
     litamaServer->add_option(
         "-i,--matchId", serverMatchId,
         "The match ID to connect to if using the Litama server."
-    )->ignore_case()->required();
+    )->ignore_case();
+    litamaServer->add_option(
+        "-u,--url", serverUrl,
+        "The URL to connect to for the Litama server.",
+        true
+    )->ignore_case();
+    litamaServer->add_flag(
+        "-c,--create", serverCreateMatch,
+        "Create a new match on the Litama server."
+    )->ignore_case();
+    litamaServer->callback(serverCommand);
 
 
     app.footer("Run --help on a subcommand to see its options.\n"

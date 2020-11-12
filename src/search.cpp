@@ -3,15 +3,28 @@
 #include "search.h"
 #include "movegen.h"
 
-float negamaxHeuristic(State state)
+float negamaxHeuristic(State state, MoveLookup *lookups)
 {
     int pieceDiff = _mm_popcnt_u32(state.allPieces[0] & boardMask) - _mm_popcnt_u32(state.allPieces[1] & boardMask);
     int centerDiff = _mm_popcnt_u32(state.allPieces[0] & centerSquares) - _mm_popcnt_u32(state.allPieces[1] & centerSquares);
-    int kingDiff = _mm_popcnt_u32(state.allPieces[0] & state.kings) - _mm_popcnt_u32(state.allPieces[1] & state.kings);
-    int kingStartingDiff = _mm_popcnt_u32(state.allPieces[0] & state.kings & redStartingSquare) -
-                           _mm_popcnt_u32(state.allPieces[1] & state.kings & blueStartingSquare);
+    Bitboard blueKing = state.allPieces[0] & state.kings;
+    Bitboard redKing = state.allPieces[1] & state.kings;
+    int kingDiff = _mm_popcnt_u32(blueKing) - _mm_popcnt_u32(redKing);
+    int kingStartingDiff = _mm_popcnt_u32(blueKing & redStartingSquare) - _mm_popcnt_u32(redKing & blueStartingSquare);
+    Bitboard allBlueMoves = allMovesForBoard(state.allPieces[0], lookups, 0);
+    Bitboard allRedMoves = allMovesForBoard(state.allPieces[1], lookups, 1);
+    int coverageDiff = _mm_popcnt_u32(allBlueMoves) - _mm_popcnt_u32(allRedMoves);
+    int kingInCheckDiff = ((redKing & allBlueMoves) != 0) - ((blueKing & allRedMoves) != 0);
 
-    return pieceDiff + centerDiff * 0.5 + kingDiff * 100 + kingStartingDiff * 100;
+    // @formatter:off
+    return
+        pieceDiff        * 1 +
+        kingInCheckDiff  * 0.8 +
+        centerDiff       * 0.2 +
+        coverageDiff     * 0.07 +
+        kingDiff         * 100 +
+        kingStartingDiff * 100;
+    // @formatter:on
 }
 
 // Negamax without alpha-beta pruning. color is 0 or 1.
@@ -19,7 +32,7 @@ SearchValue negamax(State state, MoveLookup *lookups, int depth, int color, bool
 {
     if (depth == 0 || checkWinCondition(state) != -1) {
         int colorMultiplier = color == 0 ? 1 : -1;
-        float heuristicValue = negamaxHeuristic(state) * colorMultiplier;
+        float heuristicValue = negamaxHeuristic(state, lookups) * colorMultiplier;
         SearchValue searchValue = {state, heuristicValue};
         return searchValue;
     }
@@ -49,7 +62,7 @@ SearchValue negamaxWithAbPruning(State state, MoveLookup *lookups, float alpha, 
 {
     if (depth == 0 || checkWinCondition(state) != -1) {
         int colorMultiplier = color == 0 ? 1 : -1;
-        float heuristicValue = (float) negamaxHeuristic(state) * colorMultiplier;
+        float heuristicValue = (float) negamaxHeuristic(state, lookups) * colorMultiplier;
         SearchValue searchValue = {state, heuristicValue};
         return searchValue;
     }

@@ -8,7 +8,7 @@ typedef struct {
     float value;
 } SearchValue;
 
-float negamaxHeuristic(State state);
+float negamaxHeuristic(State state, MoveLookup *lookups);
 
 SearchValue negamax(State state, MoveLookup *lookups, int depth, int color, bool start);
 

@@ -167,10 +167,12 @@ void serverCommand()
     ws->send("spectate " + serverMatchId);
     while (ws->getReadyState() != WebSocket::CLOSED) {
         if (color == turn) {
+            std::clock_t start = std::clock();
             const SearchValue &search = negamaxWithAbPruning(state, lookups, -INFINITY, INFINITY, depth, color, true);
+            double duration = (std::clock() - start) / (double) CLOCKS_PER_SEC;
             puts("Sending board:");
             printBoard(search.state);
-            printf("Evaluation: %f\n", search.value);
+            printf("Evaluation: %f, took %fs\n", search.value, duration);
             std::string serverMove = serverMoveStringFromStates(state, search.state, cards);
             std::string sentCommand = "move " + serverMatchId + " " + token + " " + serverMove;
             printf("Sent: %s\n\n", sentCommand.c_str());

@@ -276,7 +276,7 @@ int main(int argc, char **argv)
 
 
     app.footer("Run --help on a subcommand to see its options.\n"
-               "Onitama engine written in C++ by Redox.");
+               "Onitama engine written in C++ by Tangil Jahangir.");
 
 
     CLI11_PARSE(app, argc, argv);

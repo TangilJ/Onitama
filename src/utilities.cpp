@@ -36,7 +36,7 @@ void printBoard(State state)
         currentSquare >>= 1;
     }
 
-    for (int i = 0; i < 5; ++i)
+    for (int i = 4; i >= 0; --i)
         printf("%c ", 65 + i);
 
     int blue0 = _bit_scan_forward(state.allPieces[0]);
@@ -91,13 +91,18 @@ void getStateFromServerString(const std::string &string, State &state)
     state.kings         = 0b10000;
     // @formatter:on
 
-    for (int i = 0; i < 25; ++i) {
-        if (string[i] == '1' or string[i] == '2')
-            state.allPieces[0] |= firstSquare >> i;
-        if (string[i] == '3' or string[i] == '4')
-            state.allPieces[1] |= firstSquare >> i;
-        if (string[i] == '2' or string[i] == '4')
-            state.kings |= firstSquare >> i;
+    int count = 0;
+    for (int i = 0; i < 5; ++i) {
+        for (int j = 0; j <= 4; ++j) {
+            int index = i * 5 + (4 - j);
+            if (string[index] == '1' or string[index] == '2')
+                state.allPieces[0] |= firstSquare >> count;
+            if (string[index] == '3' or string[index] == '4')
+                state.allPieces[1] |= firstSquare >> count;
+            if (string[index] == '2' or string[index] == '4')
+                state.kings |= firstSquare >> count;
+            count++;
+        }
     }
 }
 
@@ -137,12 +142,12 @@ std::string serverMoveStringFromStates(State first, State second, std::vector<st
 
     int moveIndex = 31 - _bit_scan_forward(move);
     printf("moveIndex: %i\n", moveIndex);
-    char moveRank = 97 + moveIndex % 5;
+    char moveRank = 97 + (4 - moveIndex % 5);
     int moveFile = moveIndex / 5 + 1;
 
     int originalIndex = 31 - _bit_scan_forward(original);
     printf("originalIndex: %i\n", originalIndex);
-    char originalRank = 97 + originalIndex % 5;
+    char originalRank = 97 + (4 - originalIndex % 5);
     int originalFile = originalIndex / 5 + 1;
 
     std::string cardUsed = names[_bit_scan_forward(second.kings)];

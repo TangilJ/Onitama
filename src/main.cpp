@@ -186,13 +186,22 @@ void serverCommand()
 
         std::cout << "Received: " << std::setw(4) << data << std::endl << std::endl;
 
-        if (data.at("messageType") == "state")
-            if (data.at("gameState") != "waiting for player") {
+        if (data.at("messageType") == "state") {
+            if (data.at("gameState") == "in progress") {
                 processJsonState(data, lookups, state, turn);
                 puts("Current board:");
                 printBoard(state);
                 std::cout << std::endl;
             }
+            else if (data.at("gameState") == "ended")
+            {
+                processJsonState(data, lookups, state, turn);
+                puts("Final board:");
+                printBoard(state);
+                std::cout << "Game ended" << std::endl;
+                break;
+            }
+        }
     }
 
 #ifdef _WIN32

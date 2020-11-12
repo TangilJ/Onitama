@@ -161,6 +161,7 @@ void serverCommand()
         serverMatchId = data.at("matchId");
         token = data.at("token");
         color = data.at("color") == "blue" ? 0 : 1;
+        printf("matchId: %s\ntoken: %s\ncolor: %i\n", serverMatchId.c_str(), token.c_str(), color);
         break;
     }
 

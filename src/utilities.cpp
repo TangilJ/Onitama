@@ -113,40 +113,22 @@ std::string serverMoveStringFromStates(State first, State second, std::vector<st
     Bitboard move;
     Bitboard original;
 
-    puts("Blue:");
-    printBits(first.allPieces[0] & boardMask);
-    printBits(second.allPieces[0] & boardMask);
-
-    puts("Red:");
-    printBits(first.allPieces[1] & boardMask);
-    printBits(second.allPieces[1] & boardMask);
-
-    puts("Moves:");
-    printBits(blueMove);
-    printBits(redMove);
-
     if (blueMove != 0) {
         move = blueMove;
         original = ~(second.allPieces[0] & boardMask) & (first.allPieces[0] & boardMask);
-        puts("Blue original:");
-        printBits(original);
     }
     else if (redMove != 0) {
         move = redMove;
         original = ~(second.allPieces[1] & boardMask) & (first.allPieces[1] & boardMask);
-        puts("Red original:");
-        printBits(original);
     }
     else
         throw std::invalid_argument("No move detected between states");
 
     int moveIndex = 31 - _bit_scan_forward(move);
-    printf("moveIndex: %i\n", moveIndex);
     char moveRank = 97 + (4 - moveIndex % 5);
     int moveFile = moveIndex / 5 + 1;
 
     int originalIndex = 31 - _bit_scan_forward(original);
-    printf("originalIndex: %i\n", originalIndex);
     char originalRank = 97 + (4 - originalIndex % 5);
     int originalFile = originalIndex / 5 + 1;
 

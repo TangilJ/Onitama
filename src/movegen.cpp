@@ -12,19 +12,24 @@ Bitboard allMovesForPiece(Bitboard piece, Bitboard board, MoveLookup &lookup, in
     return allMovesForPiece(board, lookup, playerIndex, index);
 }
 
-Bitboard allMovesForBoard(Bitboard board, MoveLookup &lookup, int playerIndex)
+Bitboard allMovesForBoard(Bitboard board, MoveLookup *lookups, int playerIndex)
 {
     Bitboard boardPiecesToGo = board & ~boardMask;
     Bitboard moves = 0;
-    while (boardPiecesToGo) {
-        Bitboard boardSquare = boardPiecesToGo & -boardPiecesToGo;
-        boardPiecesToGo ^= boardSquare;
-        // We're rewriting the same code as allMovesForPiece instead of using the function since
-        // we only want to do ~board at the very end instead of every time we do a lookup.
-        // This is purely for performance reasons.
-        // TODO: Check if this actually makes a difference.
-        int index = 31 - _bit_scan_forward(boardSquare);
-        moves |= lookup[playerIndex][index];
+    Bitboard lastCard = 0;
+
+    for (int cardNum = 0; cardNum < 2; ++cardNum) {
+        int cardBitPosition = _bit_scan_forward(board ^ lastCard);
+        while (boardPiecesToGo) {
+            Bitboard boardSquare = boardPiecesToGo & -boardPiecesToGo;
+            boardPiecesToGo ^= boardSquare;
+            // We're rewriting the same code as allMovesForPiece instead of using the function since
+            // we only want to do ~board at the very end instead of every time we do a lookup.
+            // This is purely for performance reasons.
+            // TODO: Check if this actually makes a difference.
+            int index = 31 - _bit_scan_forward(boardSquare);
+            moves |= lookups[cardBitPosition][playerIndex][index];
+        }
     }
     moves &= ~board;
 

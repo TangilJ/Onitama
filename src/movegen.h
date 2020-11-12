@@ -7,7 +7,7 @@ Bitboard allMovesForPiece(Bitboard board, MoveLookup &lookup, int playerIndex, i
 
 Bitboard allMovesForPiece(Bitboard piece, Bitboard board, MoveLookup &lookup, int playerIndex);
 
-Bitboard allMovesForBoard(Bitboard board, MoveLookup lookup, int playerIndex);
+Bitboard allMovesForBoard(Bitboard board, MoveLookup *lookups, int playerIndex);
 
 int nextStatesForBoard(State state, MoveLookup *lookups, int playerIndex, StateArray &nextStates);
 

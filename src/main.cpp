@@ -254,6 +254,10 @@ int main(int argc, char **argv)
         "-u,--url", serverUrl,
         "The URL to connect to for the Litama server.",
         true
+    )->ignore_case(); 
+    litamaServer->add_flag(
+        "-l,--local", localServerUrl,
+        "Connects to ws://127.0.0.1 instead of the default URL."
     )->ignore_case();
     litamaServer->add_flag(
         "-c,--create", serverCreateMatch,

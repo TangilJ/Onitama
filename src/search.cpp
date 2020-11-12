@@ -17,7 +17,7 @@ float negamaxHeuristic(State state)
 // Negamax without alpha-beta pruning. color is 0 or 1.
 SearchValue negamax(State state, MoveLookup *lookups, int depth, int color, bool start)
 {
-    if (depth == 0 || checkWinCondition(state)) {
+    if (depth == 0 || checkWinCondition(state) != -1) {
         float heuristicValue = negamaxHeuristic(state);
         SearchValue searchValue = {state, heuristicValue};
         return searchValue;
@@ -46,7 +46,7 @@ SearchValue negamax(State state, MoveLookup *lookups, int depth, int color, bool
 // Negamax with alpha-beta pruning. color is 0 or 1.
 SearchValue negamaxWithAbPruning(State state, MoveLookup *lookups, float alpha, float beta, int depth, int color, bool start)
 {
-    if (depth == 0 || checkWinCondition(state)) {
+    if (depth == 0 || checkWinCondition(state) != -1) {
         float heuristicValue = (float) negamaxHeuristic(state);
         SearchValue searchValue = {state, heuristicValue};
         return searchValue;

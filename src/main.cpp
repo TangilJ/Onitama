@@ -38,6 +38,7 @@ int depth = 1;
 bool increasingPerft{false};
 bool serverCreateMatch{false};
 bool localServerUrl{false};
+bool printReceivedPackets{false};
 std::string serverMatchId;
 std::string serverUrl = "ws://litama.herokuapp.com";
 
@@ -154,7 +155,9 @@ void serverCommand()
         if (data.find("token") == data.end())
             continue;
 
-        std::cout << "Received: " << std::setw(4) << data << std::endl << std::endl;
+        if (printReceivedPackets)
+            std::cout << "Received: " << std::setw(4) << data << std::endl << std::endl;
+        
         serverMatchId = data.at("matchId");
         token = data.at("token");
         color = data.at("color") == "blue" ? 0 : 1;
@@ -184,7 +187,8 @@ void serverCommand()
         if (data.find("messageType") == data.end())
             continue;
 
-        std::cout << "Received: " << std::setw(4) << data << std::endl << std::endl;
+        if (printReceivedPackets)
+            std::cout << "Received: " << std::setw(4) << data << std::endl << std::endl;
 
         if (data.at("messageType") == "state") {
             if (data.at("gameState") == "in progress") {
@@ -271,6 +275,10 @@ int main(int argc, char **argv)
     litamaServer->add_flag(
         "-c,--create", serverCreateMatch,
         "Create a new match on the Litama server."
+    )->ignore_case();
+    litamaServer->add_flag(
+        "-p,--packets", printReceivedPackets,
+        "Print the JSON packets received from the Litama server."
     )->ignore_case();
     litamaServer->callback(serverCommand);
 

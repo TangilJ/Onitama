@@ -46,7 +46,7 @@ void perftCommand()
 {
     printf("Running perft with depth %i\n\n", depth);
 
-    if (cards.size() != 5)
+    if (std::find(cards.begin(), cards.end(), "") != cards.end())
         cards = {"ox", "boar", "horse", "elephant", "crab"};
     MoveLookup lookupsArray[5];
     getLookupsFromNames(cards, lookupsArray);
@@ -65,7 +65,7 @@ void perftCommand()
 void selfPlayCommand()
 {
     MoveLookup lookups[5];
-    if (cards.size() != 5)
+    if (std::find(cards.begin(), cards.end(), "") != cards.end())
         getRandomCards(lookups);
     else
         getLookupsFromNames(cards, lookups);

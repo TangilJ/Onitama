@@ -54,7 +54,11 @@ int main(int argc, char **argv)
         "(e.g. ox, boar, elephant, horse, crab). "
         "Leave this option out for random cards."
     )->ignore_case()->expected(5)->check(cardNameValidator);
-    selfPlay->add_option("-d,--depth", options.depth, "The number of plies that the negamax algorithm will look ahead.", true);
+    selfPlay->add_option(
+        "-d,--depth", options.depth,
+        "The number of plies that the negamax algorithm will look ahead.",
+        true
+    );
     selfPlay->callback([&]() {
         selfPlayCommand(options);
     });
@@ -68,12 +72,24 @@ int main(int argc, char **argv)
         "(e.g. ox, boar, elephant, horse, crab). "
         "Leave this option out for random cards."
     )->ignore_case()->expected(5)->check(cardNameValidator);
+    againstHuman->add_option(
+        "-d,--depth", options.depth,
+        "The number of plies that the negamax algorithm will look ahead.",
+        true
+    );
+    againstHuman->callback([&]() {
+        humanCommand(options);
+    });
 
 
     CLI::App *litamaServer = app.add_subcommand("server", "Make the AI play on the Litama server.")
         ->ignore_case();
     litamaServer->require_option(1, 3);
-    litamaServer->add_option("-d,--depth", options.depth, "The number of plies to look ahead when playing on the server.", true);
+    litamaServer->add_option(
+        "-d,--depth", options.depth,
+        "The number of plies that the negamax algorithm will look ahead.",
+        true
+    );
     litamaServer->add_option(
         "-i,--matchId", options.serverMatchId,
         "The match ID to connect to if using the Litama server."

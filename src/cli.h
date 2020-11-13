@@ -10,8 +10,10 @@ void perftCommand(CliOptions &options);
 
 void selfPlayCommand(CliOptions &options);
 
-void processJsonState(CliOptions &options, json j, MoveLookup *lookups, State &state, int &turn);
-
 void serverCommand(CliOptions &options);
+
+void humanCommand(CliOptions &options);
+
+void processJsonState(CliOptions &options, json j, MoveLookup *lookups, State &state, int &turn);
 
 #endif //ONITAMA_CLI_H

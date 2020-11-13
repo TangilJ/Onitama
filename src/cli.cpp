@@ -1,6 +1,7 @@
 #include <nlohmann/json.hpp>
 #include <easywsclient.hpp>
 #include "main.h"
+#include "cli.h"
 #include "perft.h"
 #include "utilities.h"
 #include "movegen.h"
@@ -68,20 +69,6 @@ void selfPlayCommand(CliOptions &options)
         printBoard(state);
         printf("Evaluation: %.2f\n\n", negamax.value);
     }
-}
-
-void processJsonState(CliOptions &options, json j, MoveLookup *lookups, State &state, int &turn)
-{
-    turn = j.at("currentTurn") == "blue" ? 0 : 1;
-    getStateFromServerString(j.at("board"), state);
-    options.cards = {
-        j.at("cards").at("blue")[0],
-        j.at("cards").at("blue")[1],
-        j.at("cards").at("red")[0],
-        j.at("cards").at("red")[1],
-        j.at("cards").at("side")
-    };
-    getLookupsFromNames(options.cards, lookups);
 }
 
 void serverCommand(CliOptions &options)
@@ -194,3 +181,16 @@ void serverCommand(CliOptions &options)
 #endif
 }
 
+void processJsonState(CliOptions &options, json j, MoveLookup *lookups, State &state, int &turn)
+{
+    turn = j.at("currentTurn") == "blue" ? 0 : 1;
+    getStateFromServerString(j.at("board"), state);
+    options.cards = {
+        j.at("cards").at("blue")[0],
+        j.at("cards").at("blue")[1],
+        j.at("cards").at("red")[0],
+        j.at("cards").at("red")[1],
+        j.at("cards").at("side")
+    };
+    getLookupsFromNames(options.cards, lookups);
+}

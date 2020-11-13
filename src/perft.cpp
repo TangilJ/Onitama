@@ -54,7 +54,7 @@ void printPerftSpeed(State state, int depth, int playerIndex, MoveLookup *lookup
         total = parallelPerft(state, depth, playerIndex, lookups);
     else
         total = perft(state, depth, playerIndex, lookups);
-        
+
     double duration = (std::clock() - start) / (double) CLOCKS_PER_SEC;
     double speed = (double) total / duration / 1000000;
     printf("Depth %i (%10llu nodes) took %.5ssec = (%.5s Mnodes/sec)\n", depth, total,

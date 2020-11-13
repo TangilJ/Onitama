@@ -28,9 +28,10 @@ int main(int argc, char **argv)
 
     CLI::App *perftSubcommand = app.add_subcommand(
         "perft",
-        "Run a parallelised perft (performance test)."
+        "Run perft (performance test)."
     )->ignore_case();
     perftSubcommand->add_option("-d,--depth", options.depth, "Perft depth.", true);
+    perftSubcommand->add_flag("-p,--parallel", options.parallelPerft, "Parallelise perft.");
     perftSubcommand->add_flag(
         "-i,--increasing", options.increasingPerft,
         "Make the perft increase depth-by-depth to the given depth."

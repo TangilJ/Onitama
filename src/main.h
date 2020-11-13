@@ -31,6 +31,7 @@ struct CliOptions {
     std::vector<std::string> cards = {"", "", "", "", ""};
     int depth = 1;
     bool increasingPerft{false};
+    bool parallelPerft{false};
     bool serverCreateMatch{false};
     bool localServerUrl{false};
     bool printReceivedPackets{false};

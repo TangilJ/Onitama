@@ -32,9 +32,9 @@ void perftCommand(CliOptions &options)
     };
 
     if (options.increasingPerft)
-        printIncreasingPerftSpeed(state, options.depth, 0, lookupsArray);
+        printIncreasingPerftSpeed(state, options.depth, 0, lookupsArray, options.parallelPerft);
     else
-        printPerftSpeed(state, options.depth, 0, lookupsArray);
+        printPerftSpeed(state, options.depth, 0, lookupsArray, options.parallelPerft);
 }
 
 void selfPlayCommand(CliOptions &options)
@@ -147,15 +147,15 @@ void serverCommand(CliOptions &options)
             std::clock_t start = std::clock();
             const SearchValue &search = negamaxWithAbPruning(state, lookups, -INFINITY, INFINITY, options.depth, color, true);
             double duration = (std::clock() - start) / (double) CLOCKS_PER_SEC;
-            
+
             puts("Sending board:");
             printBoard(search.state);
             printf("Evaluation: %f, took %fs\n", search.value, duration);
-            
+
             std::string serverMove = serverMoveStringFromStates(state, search.state, options.cards);
             std::string sentCommand = "move " + options.serverMatchId + " " + token + " " + serverMove;
             printf("Sent: %s\n\n", sentCommand.c_str());
-            
+
             ws->send(sentCommand);
             turn = -1;
         }

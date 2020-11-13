@@ -26,6 +26,8 @@ add_executable(
         src/search.h
         extern/easywsclient/easywsclient.cpp
         extern/easywsclient/easywsclient.hpp
+        src/cli.cpp
+        src/cli.h
 )
 
 add_subdirectory(extern/CLI11)

@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <array>
+#include <vector>
 
 using Bitboard = uint32_t;
 
@@ -25,5 +26,16 @@ struct State {
 };
 using MoveLookup = std::array<std::array<Bitboard, 25>, 2>;
 using StateArray = std::array<State, 40>;
+
+struct CliOptions {
+    std::vector<std::string> cards = {"", "", "", "", ""};
+    int depth = 1;
+    bool increasingPerft{false};
+    bool serverCreateMatch{false};
+    bool localServerUrl{false};
+    bool printReceivedPackets{false};
+    std::string serverMatchId;
+    std::string serverUrl = "ws://litama.herokuapp.com";
+};
 
 #endif //ONITAMA_MAIN_H

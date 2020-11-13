@@ -104,7 +104,7 @@ void serverCommand(CliOptions &options)
         printf("Sent: join %s", options.serverMatchId.c_str());
     }
     else {
-        puts("Did not enter any options for server subcommand. Type 'Onitama.exe server --help' to see options.");
+        puts("Did not enter -c or -i for server subcommand. Type 'Onitama.exe server --help' to see options.");
         return;
     }
 
@@ -179,6 +179,11 @@ void serverCommand(CliOptions &options)
 #ifdef _WIN32
     WSACleanup();
 #endif
+}
+
+void humanCommand(CliOptions &options)
+{
+    puts("Playing against the AI is currently not supported.");
 }
 
 void processJsonState(CliOptions &options, json j, MoveLookup *lookups, State &state, int &turn)

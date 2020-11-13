@@ -2,7 +2,7 @@
 #define ONITAMA_DATA_H
 
 #include <iostream>
-#include <map>
+#include <unordered_map>
 #include "main.h"
 
 // Blue is element 0, red is element 1
@@ -951,7 +951,7 @@ constexpr MoveLookup eelMoves = {
     }
 };
 
-const std::map<std::string, MoveLookup> cardMap = {
+const std::unordered_map<std::string, MoveLookup> cardMap = {
     {"rabbit",   rabbitMoves},
     {"cobra",    cobraMoves},
     {"rooster",  roosterMoves},

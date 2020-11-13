@@ -1,6 +1,3 @@
-#include <CLI/CLI.hpp>
-#include <nlohmann/json.hpp>
-
 #ifdef _WIN32
 #pragma comment( lib, "ws2_32" )
 
@@ -8,6 +5,8 @@
 
 #endif
 
+#include <CLI/CLI.hpp>
+#include <nlohmann/json.hpp>
 #include <easywsclient.hpp>
 #include "main.h"
 #include "data.h"
@@ -137,10 +136,12 @@ void serverCommand()
     if (serverCreateMatch) {
         ws->send("create");
         puts("Sent: create");
-    } else if (!serverMatchId.empty()) {
+    }
+    else if (!serverMatchId.empty()) {
         ws->send("join " + serverMatchId);
         printf("Sent: join %s", serverMatchId.c_str());
-    } else {
+    }
+    else {
         puts("Did not enter any options for server subcommand. Type 'Onitama.exe server --help' to see options.");
         return;
     }
@@ -157,7 +158,7 @@ void serverCommand()
 
         if (printReceivedPackets)
             std::cout << "Received: " << std::setw(4) << data << std::endl << std::endl;
-        
+
         serverMatchId = data.at("matchId");
         token = data.at("token");
         color = data.at("color") == "blue" ? 0 : 1;
@@ -200,8 +201,7 @@ void serverCommand()
                 printBoard(state);
                 std::cout << std::endl;
             }
-            else if (data.at("gameState") == "ended")
-            {
+            else if (data.at("gameState") == "ended") {
                 processJsonState(data, lookups, state, turn);
                 puts("Final board:");
                 printBoard(state);
@@ -270,7 +270,7 @@ int main(int argc, char **argv)
         "-u,--url", serverUrl,
         "The URL to connect to for the Litama server.",
         true
-    )->ignore_case(); 
+    )->ignore_case();
     litamaServer->add_flag(
         "-l,--local", localServerUrl,
         "Connects to ws://127.0.0.1 instead of the default URL."

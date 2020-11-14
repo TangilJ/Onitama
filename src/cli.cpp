@@ -217,9 +217,9 @@ void processJsonState(CliOptions &options, json j, MoveLookup *lookups, State &s
         };
         getLookupsFromNames(options.cards, lookups);
         // @formatter:off
-        state.allPieces[0]  = 0b00011;
-        state.allPieces[1]  = 0b01100;
-        state.kings         = 0b10000;
+        state.allPieces[0]  |= 0b00011;
+        state.allPieces[1]  |= 0b01100;
+        state.kings         |= 0b10000;
         // @formatter:on
         firstPacket = false;
     }

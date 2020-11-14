@@ -116,8 +116,15 @@ void serverCommand(CliOptions &options)
             data = json::parse(message);
         });
 
-        if (data.find("token") == data.end())
+        if (data.find("messageType") == data.end())
             continue;
+
+        if (data.at("messageType") == "error") {
+            puts("Received error:");
+            std::cout << std::setw(4) << data << std::endl << std::endl;
+            puts("Exiting.");
+            return;
+        }
 
         if (options.printReceivedPackets)
             std::cout << "Received: " << std::setw(4) << data << std::endl << std::endl;
@@ -158,7 +165,10 @@ void serverCommand(CliOptions &options)
             continue;
 
         if (options.printReceivedPackets)
-            std::cout << "Received: " << std::setw(4) << data << std::endl << std::endl;
+            // No need to print the error twice since errors will always be printed,
+            // regardless of options.printReceivedPackets
+            if (data.at("messageType") != "error")
+                std::cout << "Received: " << std::setw(4) << data << std::endl << std::endl;
 
         if (data.at("messageType") == "state") {
             if (data.at("gameState") == "in progress") {
@@ -174,6 +184,11 @@ void serverCommand(CliOptions &options)
                 std::cout << "Game ended" << std::endl;
                 break;
             }
+        }
+        else if (data.at("messageType") == "error") {
+            // Print the packet even if options.printReceivedPackets is false since an error is a big issue.
+            puts("Received error:");
+            std::cout << std::setw(4) << data << std::endl << std::endl;
         }
     }
 

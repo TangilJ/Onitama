@@ -90,19 +90,21 @@ void serverCommand(CliOptions &options)
     std::unique_ptr<WebSocket> ws(WebSocket::from_url(options.serverUrl));
 
     std::string token;
-    int color;
+    int index;
     int turn = -1;
+    int color = -2;
     State state{};
     MoveLookup lookups[5];
     bool firstPacket = true;
 
     if (options.serverCreateMatch) {
-        ws->send("create");
-        puts("Sent: create");
+        ws->send("create Bot");
+        puts("Sent: create Bot");
     }
     else if (!options.serverMatchId.empty()) {
-        ws->send("join " + options.serverMatchId);
-        printf("Sent: join %s", options.serverMatchId.c_str());
+        const std::basic_string<char> &message = "join " + options.serverMatchId + " Bot";
+        ws->send(message);
+        printf("Sent: %s", message.c_str());
     }
     else {
         puts("Did not enter -c or -i for server subcommand. Type 'Onitama.exe server --help' to see options.");
@@ -131,8 +133,8 @@ void serverCommand(CliOptions &options)
 
         options.serverMatchId = data.at("matchId");
         token = data.at("token");
-        color = data.at("color") == "blue" ? 0 : 1;
-        printf("matchId: %s\ntoken: %s\ncolor: %i\n", options.serverMatchId.c_str(), token.c_str(), color);
+        index = data.at("index");
+        printf("matchId: %s\ntoken: %s\nindex: %i\n", options.serverMatchId.c_str(), token.c_str(), index);
         break;
     }
 
@@ -172,13 +174,13 @@ void serverCommand(CliOptions &options)
 
         if (data.at("messageType") == "state") {
             if (data.at("gameState") == "in progress") {
-                processJsonState(options, data, lookups, state, turn, firstPacket);
+                processJsonState(options, data, lookups, state, turn, color, index, firstPacket);
                 puts("Current board:");
                 printBoard(state);
                 std::cout << std::endl;
             }
             else if (data.at("gameState") == "ended") {
-                processJsonState(options, data, lookups, state, turn, firstPacket);
+                processJsonState(options, data, lookups, state, turn, color, index, firstPacket);
                 puts("Final board:");
                 printBoard(state);
                 std::cout << "Game ended" << std::endl;
@@ -202,9 +204,11 @@ void humanCommand(CliOptions &options)
     puts("Playing against the AI is currently not supported.");
 }
 
-void processJsonState(CliOptions &options, json j, MoveLookup *lookups, State &state, int &turn, bool &firstPacket)
+void processJsonState(CliOptions &options, json j, MoveLookup *lookups, State &state, int &turn, int &color, int &index,
+                      bool &firstPacket)
 {
     turn = j.at("currentTurn") == "blue" ? 0 : 1;
+    color = j.at("indices").at("blue") == index ? 0 : 1;
     getStateFromServerString(j.at("board"), state);
     if (firstPacket) {
         // Add the new cards to the bitboards and get the lookup tables
@@ -223,8 +227,7 @@ void processJsonState(CliOptions &options, json j, MoveLookup *lookups, State &s
         // @formatter:on
         firstPacket = false;
     }
-    else
-    {
+    else {
         // Update the cards in the bitboards so that they match the lookup tables we already made on the first packet
         for (int i = 0; i < 2; ++i) {
             std::string name = j.at("cards").at("blue")[i];

@@ -14,6 +14,6 @@ void serverCommand(CliOptions &options);
 
 void humanCommand(CliOptions &options);
 
-void processJsonState(CliOptions &options, json j, MoveLookup *lookups, State &state, int &turn);
+void processJsonState(CliOptions &options, json j, MoveLookup *lookups, State &state, int &turn, bool &firstPacket);
 
 #endif //ONITAMA_CLI_H

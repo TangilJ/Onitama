@@ -94,6 +94,7 @@ void serverCommand(CliOptions &options)
     int turn = -1;
     State state{};
     MoveLookup lookups[5];
+    bool firstPacket = true;
 
     if (options.serverCreateMatch) {
         ws->send("create");
@@ -161,13 +162,13 @@ void serverCommand(CliOptions &options)
 
         if (data.at("messageType") == "state") {
             if (data.at("gameState") == "in progress") {
-                processJsonState(options, data, lookups, state, turn);
+                processJsonState(options, data, lookups, state, turn, firstPacket);
                 puts("Current board:");
                 printBoard(state);
                 std::cout << std::endl;
             }
             else if (data.at("gameState") == "ended") {
-                processJsonState(options, data, lookups, state, turn);
+                processJsonState(options, data, lookups, state, turn, firstPacket);
                 puts("Final board:");
                 printBoard(state);
                 std::cout << "Game ended" << std::endl;
@@ -186,16 +187,42 @@ void humanCommand(CliOptions &options)
     puts("Playing against the AI is currently not supported.");
 }
 
-void processJsonState(CliOptions &options, json j, MoveLookup *lookups, State &state, int &turn)
+void processJsonState(CliOptions &options, json j, MoveLookup *lookups, State &state, int &turn, bool &firstPacket)
 {
     turn = j.at("currentTurn") == "blue" ? 0 : 1;
     getStateFromServerString(j.at("board"), state);
-    options.cards = {
-        j.at("cards").at("blue")[0],
-        j.at("cards").at("blue")[1],
-        j.at("cards").at("red")[0],
-        j.at("cards").at("red")[1],
-        j.at("cards").at("side")
-    };
-    getLookupsFromNames(options.cards, lookups);
+    if (firstPacket) {
+        // Add the new cards to the bitboards and get the lookup tables
+        options.cards = {
+            j.at("cards").at("blue")[0],
+            j.at("cards").at("blue")[1],
+            j.at("cards").at("red")[0],
+            j.at("cards").at("red")[1],
+            j.at("cards").at("side")
+        };
+        getLookupsFromNames(options.cards, lookups);
+        // @formatter:off
+        state.allPieces[0]  = 0b00011;
+        state.allPieces[1]  = 0b01100;
+        state.kings         = 0b10000;
+        // @formatter:on
+        firstPacket = false;
+    }
+    else
+    {
+        // Update the cards in the bitboards so that they match the lookup tables we already made on the first packet
+        for (int i = 0; i < 2; ++i) {
+            std::string name = j.at("cards").at("blue")[i];
+            int index = std::find(options.cards.begin(), options.cards.end(), name) - options.cards.begin();
+            state.allPieces[0] |= 1 << index;
+        }
+        for (int i = 0; i < 2; ++i) {
+            std::string name = j.at("cards").at("red")[i];
+            int index = std::find(options.cards.begin(), options.cards.end(), name) - options.cards.begin();
+            state.allPieces[1] |= 1 << index;
+        }
+        std::string name = j.at("cards").at("side");
+        int index = std::find(options.cards.begin(), options.cards.end(), name) - options.cards.begin();
+        state.kings |= 1 << index;
+    }
 }

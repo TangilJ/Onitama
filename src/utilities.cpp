@@ -85,11 +85,9 @@ void getRandomCards(MoveLookup *lookups)
 
 void getStateFromServerString(const std::string &string, State &state)
 {
-    // @formatter:off
-    state.allPieces[0]  = 0b00011;
-    state.allPieces[1]  = 0b01100;
-    state.kings         = 0b10000;
-    // @formatter:on
+    state.allPieces[0] = 0;
+    state.allPieces[1] = 0;
+    state.kings = 0;
 
     int count = 0;
     for (int i = 0; i < 5; ++i) {

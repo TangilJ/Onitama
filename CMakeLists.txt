@@ -11,6 +11,10 @@ else ()
     message(FATAL_ERROR "CMAKE_BUILD_TYPE was not 'Debug' or 'Release'")
 endif ()
 
+if (WIN32)
+    link_libraries(ws2_32)
+endif ()
+
 add_executable(
         Onitama
         src/main.cpp

@@ -3,6 +3,7 @@
 #include <intrin.h>
 #include <vector>
 #include <iterator>
+#include <algorithm>
 #include "utilities.h"
 #include "data.h"
 

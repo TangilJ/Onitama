@@ -1,6 +1,12 @@
 #include <ctime>
 #include <string>
+
+// GCC doesn't support <execution> without relying on Intel TBB, so we'll just
+// disable anything parallel if the compiler being used is GCC.
+#ifndef __GNUC__
 #include <execution>
+#endif
+
 #include "data.h"
 #include "perft.h"
 #include "movegen.h"
@@ -24,6 +30,7 @@ unsigned long long perft(State state, int depth, int playerIndex, MoveLookup *lo
 
 unsigned long long parallelPerft(State state, int depth, int playerIndex, MoveLookup *lookups)
 {
+#ifndef __GNUC__
     if (depth == 0 || checkWinCondition(state) != -1)
         return 1;
 
@@ -37,6 +44,10 @@ unsigned long long parallelPerft(State state, int depth, int playerIndex, MoveLo
     });
 
     return total;
+#else
+    throw std::runtime_error("This executable was built using GCC which does not support parallel execution. "
+                             "To run parallel perft, run a build which was built with Clang.");
+#endif
 }
 
 void printIncreasingPerftSpeed(State state, int depth, int playerIndex, MoveLookup *lookups, bool parallel)

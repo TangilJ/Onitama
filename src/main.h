@@ -37,6 +37,7 @@ struct CliOptions {
     bool serverCreateMatch{false};
     bool localServerUrl{false};
     bool printReceivedPackets{false};
+    bool printBoard{false};
     std::string serverMatchId;
     std::string serverUrl = "ws://litama.herokuapp.com";
     int tTableMiB = 500;

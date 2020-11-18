@@ -150,8 +150,10 @@ void serverCommand(CliOptions &options)
                                                        tTableSize, true);
             double duration = (std::clock() - start) / (double) CLOCKS_PER_SEC;
 
-            puts("Sending board:");
-            printBoard(search.state);
+            if (options.printBoard) {
+                puts("Sending board:");
+                printBoard(search.state);
+            }
             printf("Evaluation: %f, took %fs\n", search.value, duration);
 
             std::string serverMove = serverMoveStringFromStates(state, search.state, options.cards);
@@ -180,14 +182,18 @@ void serverCommand(CliOptions &options)
         if (data.at("messageType") == "state") {
             if (data.at("gameState") == "in progress") {
                 processJsonState(options, data, lookups, state, turn, color, index, firstPacket);
-                puts("Current board:");
-                printBoard(state);
-                std::cout << std::endl;
+                if (options.printBoard) {
+                    puts("Current board:");
+                    printBoard(state);
+                    std::cout << std::endl;
+                }
             }
             else if (data.at("gameState") == "ended") {
                 processJsonState(options, data, lookups, state, turn, color, index, firstPacket);
-                puts("Final board:");
-                printBoard(state);
+                if (options.printBoard) {
+                    puts("Final board:");
+                    printBoard(state);
+                }
                 std::cout << "Game ended" << std::endl;
                 break;
             }

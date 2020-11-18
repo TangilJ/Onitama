@@ -116,6 +116,10 @@ int main(int argc, char **argv)
         "-p,--packets", options.printReceivedPackets,
         "Print the JSON packets received from the Litama server."
     )->ignore_case();
+    litamaServer->add_flag(
+        "-b,--board", options.printBoard,
+        "Print the current board, the board that will be sent to the server, and the final board."
+    )->ignore_case();
     litamaServer->callback([&]() {
         serverCommand(options);
     });

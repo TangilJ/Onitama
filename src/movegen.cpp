@@ -14,7 +14,7 @@ Bitboard allMovesForPiece(Bitboard piece, Bitboard board, MoveLookup &lookup, in
 
 Bitboard allMovesForBoard(Bitboard board, MoveLookup *lookups, int playerIndex)
 {
-    Bitboard boardPiecesToGo = board & ~boardMask;
+    Bitboard boardPiecesToGo = board & boardMask;
     Bitboard moves = 0;
     Bitboard lastCard = 0;
 

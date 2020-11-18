@@ -2,6 +2,7 @@
 #include <cmath>
 #include "search.h"
 #include "movegen.h"
+#include "zobrist.h"
 
 float negamaxHeuristic(State state, MoveLookup *lookups)
 {
@@ -33,8 +34,7 @@ SearchValue negamaxWithAbPruning(State state, MoveLookup *lookups, float alpha, 
     if (depth == 0 || checkWinCondition(state) != -1) {
         int colorMultiplier = color == 0 ? 1 : -1;
         float heuristicValue = (float) negamaxHeuristic(state, lookups) * colorMultiplier;
-        SearchValue searchValue = {state, heuristicValue};
-        return searchValue;
+        return {state, heuristicValue};
     }
 
     StateArray array;
@@ -51,7 +51,7 @@ SearchValue negamaxWithAbPruning(State state, MoveLookup *lookups, float alpha, 
             bestState = nextDepthNegamax.state;
         }
 
-        alpha = alpha > bestValue ? alpha : bestValue;
+        alpha = std::max(alpha, bestValue);
 
         if (alpha >= beta)
             break;
@@ -60,6 +60,68 @@ SearchValue negamaxWithAbPruning(State state, MoveLookup *lookups, float alpha, 
     if (start == 0)
         bestState = state;
 
-    SearchValue searchValue = {bestState, bestValue};
-    return searchValue;
+    return {bestState, bestValue};
+}
+
+// Negamax with alpha-beta pruning and a transposition table. color is 0 or 1.
+SearchValue negamaxABAndTT(State state, MoveLookup *lookups, float alpha, float beta, int depth, int color, TTEntry *tTable,
+                           ZobristTable &zTable, int tTableSize, bool start)
+{
+    float originalAlpha = alpha;
+
+    ZobristKey key = hashZobrist(state, zTable);
+    TTEntry *entry = &tTable[key % tTableSize];
+    if (entry->valid && entry->depth >= depth) {
+        if (entry->flag == TTFlag::Exact)
+            return {state, entry->value};
+        if (entry->flag == TTFlag::LowerBound)
+            alpha = std::max(alpha, entry->value);
+        else if (entry->flag == TTFlag::UpperBound)
+            beta = std::min(beta, entry->value);
+
+        if (alpha >= beta)
+            return {state, entry->value};
+    }
+
+    if (depth == 0 || checkWinCondition(state) != -1) {
+        int colorMultiplier = color == 0 ? 1 : -1;
+        float heuristicValue = (float) negamaxHeuristic(state, lookups) * colorMultiplier;
+        return {state, heuristicValue};
+    }
+
+    StateArray array;
+    int stateSize = nextStatesForBoard(state, lookups, color, array);
+
+    float bestValue = -INFINITY;
+    State bestState;
+
+    for (int i = 0; i < stateSize; ++i) {
+        SearchValue nextDepthNegamax = negamaxABAndTT(array[i], lookups, -beta, -alpha, depth - 1, 1 - color, tTable, zTable,
+                                                      tTableSize, false);
+
+        if (bestValue < -nextDepthNegamax.value) {
+            bestValue = -nextDepthNegamax.value;
+            bestState = nextDepthNegamax.state;
+        }
+
+        alpha = alpha > bestValue ? alpha : bestValue;
+
+        if (alpha >= beta)
+            break;
+    }
+
+    entry->value = bestValue;
+    if (bestValue <= originalAlpha)
+        entry->flag = TTFlag::UpperBound;
+    else if (bestValue >= beta)
+        entry->flag = TTFlag::LowerBound;
+    else
+        entry->flag = TTFlag::Exact;
+    entry->depth = depth;
+    entry->valid = true;
+
+    if (start == 0)
+        bestState = state;
+
+    return {bestState, bestValue};
 }

@@ -26,6 +26,8 @@ struct State {
 };
 using MoveLookup = std::array<std::array<Bitboard, 25>, 2>;
 using StateArray = std::array<State, 40>;
+using ZobristKey = uint32_t;
+using ZobristTable = std::array<std::array<ZobristKey, 3>, 32>;
 
 struct CliOptions {
     std::vector<std::string> cards = {"", "", "", "", ""};
@@ -37,6 +39,7 @@ struct CliOptions {
     bool printReceivedPackets{false};
     std::string serverMatchId;
     std::string serverUrl = "ws://litama.herokuapp.com";
+    int tTableMiB = 500;
 };
 
 #endif //ONITAMA_MAIN_H

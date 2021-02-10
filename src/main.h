@@ -23,19 +23,10 @@ struct State {
     // Element 0 is blue, element 1 is red
     Bitboard allPieces[2];
     Bitboard kings;
-    
-    bool operator==(const State& other) {
-        return
-            this->allPieces[0] == other.allPieces[0] &&
-            this->allPieces[1] == other.allPieces[1] &&
-            this->kings == other.kings;
-    }
 };
 
 using MoveLookup = std::array<std::array<Bitboard, 25>, 2>;
 using StateArray = std::array<State, 40>;
-using ZobristKey = uint32_t;
-using ZobristTable = std::array<std::array<ZobristKey, 3>, 32>;
 
 struct CliOptions {
     std::vector<std::string> cards = {"", "", "", "", ""};
@@ -48,7 +39,6 @@ struct CliOptions {
     bool printBoard{false};
     std::string serverMatchId;
     std::string serverUrl = "ws://litama.herokuapp.com";
-    int tTableMiB = 500;
 };
 
 #endif //ONITAMA_MAIN_H

@@ -91,11 +91,6 @@ int main(int argc, char **argv)
         true
     );
     litamaServer->add_option(
-        "-t,--ttable", options.tTableMiB,
-        "The size (in MiB) of the transposition table that will be used in memory.",
-        true
-    );
-    litamaServer->add_option(
         "-i,--matchId", options.serverMatchId,
         "The match ID to connect to if using the Litama server."
     )->ignore_case();

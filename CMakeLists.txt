@@ -32,8 +32,6 @@ add_executable(
         extern/easywsclient/easywsclient.hpp
         src/cli.cpp
         src/cli.h
-        src/zobrist.cpp
-        src/zobrist.h
 )
 
 add_subdirectory(extern/CLI11)

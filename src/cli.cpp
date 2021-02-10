@@ -6,7 +6,6 @@
 #include "utilities.h"
 #include "movegen.h"
 #include "search.h"
-#include "zobrist.h"
 
 #ifdef _WIN32
 #pragma comment( lib, "ws2_32" )
@@ -97,9 +96,6 @@ void serverCommand(CliOptions &options)
     State state{};
     MoveLookup lookups[5];
     bool firstPacket = true;
-    ZobristTable zTable = initZobrist();
-    int tTableSize = options.tTableMiB * 1024 * 1024 / sizeof(TTEntry);
-    auto *tTable = new TTEntry[tTableSize]();
 
     if (options.serverCreateMatch) {
         ws->send("create Bot");
@@ -146,8 +142,7 @@ void serverCommand(CliOptions &options)
     while (ws->getReadyState() != WebSocket::CLOSED) {
         if (color == turn) {
             std::clock_t start = std::clock();
-            const SearchValue &search = negamaxABAndTT(state, lookups, -INFINITY, INFINITY, options.depth, color, tTable, zTable,
-                                                       tTableSize, true);
+            const SearchValue &search = negamaxWithAbPruning(state, lookups, -INFINITY, INFINITY, options.depth, color, true);
             double duration = (std::clock() - start) / (double) CLOCKS_PER_SEC;
 
             if (options.printBoard) {
@@ -204,8 +199,6 @@ void serverCommand(CliOptions &options)
             std::cout << std::setw(4) << data << std::endl << std::endl;
         }
     }
-
-    delete[] tTable;
 
 #ifdef _WIN32
     WSACleanup();

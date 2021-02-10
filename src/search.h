@@ -15,7 +15,7 @@ enum class TTFlag {
 };
 
 struct TTEntry {
-    bool valid;
+    State state;
     int depth;
     TTFlag flag;
     float value;

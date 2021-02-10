@@ -23,7 +23,15 @@ struct State {
     // Element 0 is blue, element 1 is red
     Bitboard allPieces[2];
     Bitboard kings;
+    
+    bool operator==(const State& other) {
+        return
+            this->allPieces[0] == other.allPieces[0] &&
+            this->allPieces[1] == other.allPieces[1] &&
+            this->kings == other.kings;
+    }
 };
+
 using MoveLookup = std::array<std::array<Bitboard, 25>, 2>;
 using StateArray = std::array<State, 40>;
 using ZobristKey = uint32_t;

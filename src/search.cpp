@@ -71,7 +71,7 @@ SearchValue negamaxABAndTT(State state, MoveLookup *lookups, float alpha, float 
 
     ZobristKey key = hashZobrist(state, zTable);
     TTEntry *entry = &tTable[key % tTableSize];
-    if (entry->valid && entry->depth >= depth) {
+    if (entry->state == state && entry->depth >= depth) {
         if (entry->flag == TTFlag::Exact)
             return {state, entry->value};
         if (entry->flag == TTFlag::LowerBound)
@@ -118,7 +118,7 @@ SearchValue negamaxABAndTT(State state, MoveLookup *lookups, float alpha, float 
     else
         entry->flag = TTFlag::Exact;
     entry->depth = depth;
-    entry->valid = true;
+    entry->state = state;
 
     if (start == 0)
         bestState = state;

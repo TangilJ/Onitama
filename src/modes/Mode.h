@@ -8,7 +8,7 @@
 struct Mode {
     std::vector<std::string> cards = {"", "", "", "", ""};
     int depth = 1;
-    
+
     virtual void run() = 0;
 };
 

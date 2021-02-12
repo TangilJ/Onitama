@@ -33,8 +33,15 @@ int main(int argc, char **argv)
         "perft",
         "Run perft (performance test)."
     )->ignore_case();
-    perftSubcommand->add_option("-d,--depth", perftMode.depth, "Perft depth.", true)->ignore_case();
-    perftSubcommand->add_flag("-p,--parallel", perftMode.parallelPerftOption, "Parallelise perft.")->ignore_case();
+    perftSubcommand->add_option(
+        "-d,--depth", perftMode.depth,
+        "Perft depth.",
+        true
+    )->ignore_case();
+    perftSubcommand->add_flag(
+        "-p,--parallel", perftMode.parallelPerftOption,
+        "Parallelise perft."
+    )->ignore_case();
     perftSubcommand->add_flag(
         "-i,--increasing", perftMode.increasingPerft,
         "Make the perft increase depth-by-depth to the given depth."
@@ -50,8 +57,10 @@ int main(int argc, char **argv)
 
 
     SelfPlayMode selfPlayMode;
-    CLI::App *selfPlay = app.add_subcommand("self", "Make the AI play against itself.")
-        ->ignore_case();
+    CLI::App *selfPlay = app.add_subcommand(
+        "self",
+        "Make the AI play against itself."
+    )->ignore_case();
     selfPlay->add_option(
         "-c,--cards", selfPlayMode.cards,
         "The 5 cards to be used in a self-play game in order of: blue1, blue2, red1, red2, side "
@@ -69,8 +78,10 @@ int main(int argc, char **argv)
 
 
     HumanPlayMode humanPlayMode;
-    CLI::App *againstHuman = app.add_subcommand("human", "Make the AI play against a human.")
-        ->ignore_case();
+    CLI::App *againstHuman = app.add_subcommand(
+        "human",
+        "Make the AI play against a human."
+    )->ignore_case();
     againstHuman->add_option(
         "-c,--cards", humanPlayMode.cards,
         "The 5 cards to be used in a game against humans in order of: blue1, blue2, red1, red2, side "
@@ -88,8 +99,10 @@ int main(int argc, char **argv)
 
 
     ServerPlayMode serverPlayMode;
-    CLI::App *litamaServer = app.add_subcommand("server", "Make the AI play on the Litama server.")
-        ->ignore_case();
+    CLI::App *litamaServer = app.add_subcommand(
+        "server",
+        "Make the AI play on the Litama server."
+    )->ignore_case();
     litamaServer->require_option(1, 3);
     litamaServer->add_option(
         "-d,--depth", serverPlayMode.depth,

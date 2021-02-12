@@ -33,12 +33,12 @@ int main(int argc, char **argv)
         "perft",
         "Run perft (performance test)."
     )->ignore_case();
-    perftSubcommand->add_option("-d,--depth", perftMode.depth, "Perft depth.", true);
-    perftSubcommand->add_flag("-p,--parallel", perftMode.parallelPerftOption, "Parallelise perft.");
+    perftSubcommand->add_option("-d,--depth", perftMode.depth, "Perft depth.", true)->ignore_case();
+    perftSubcommand->add_flag("-p,--parallel", perftMode.parallelPerftOption, "Parallelise perft.")->ignore_case();
     perftSubcommand->add_flag(
         "-i,--increasing", perftMode.increasingPerft,
         "Make the perft increase depth-by-depth to the given depth."
-    );
+    )->ignore_case();
     perftSubcommand->add_option(
         "-c,--cards", perftMode.cards,
         "The 5 cards to be used in perft in order of: blue1, blue2, red1, red2, side. "
@@ -62,7 +62,7 @@ int main(int argc, char **argv)
         "-d,--depth", selfPlayMode.depth,
         "The number of plies that the negamax algorithm will look ahead.",
         true
-    );
+    )->ignore_case();
     selfPlay->callback([&]() {
         selfPlayMode.run();
     });
@@ -81,7 +81,7 @@ int main(int argc, char **argv)
         "-d,--depth", humanPlayMode.depth,
         "The number of plies that the negamax algorithm will look ahead.",
         true
-    );
+    )->ignore_case();
     againstHuman->callback([&]() {
         humanPlayMode.run();
     });
@@ -95,7 +95,7 @@ int main(int argc, char **argv)
         "-d,--depth", serverPlayMode.depth,
         "The number of plies that the negamax algorithm will look ahead.",
         true
-    );
+    )->ignore_case();
     litamaServer->add_option(
         "-i,--matchId", serverPlayMode.serverMatchId,
         "The match ID to connect to if using the Litama server."

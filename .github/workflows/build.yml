@@ -1,0 +1,33 @@
+name: Build
+
+on: [ push ]
+
+env:
+  BUILD_TYPE: Release
+  CC: C:/msys64/mingw64/bin/gcc.exe
+  CXX: C:/msys64/mingw64/bin/g++.exe
+
+jobs:
+  build:
+    name: Windows Mingw-w64 GCC
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Update Submodules
+        run: git submodule update --init --recursive
+
+      - name: Create Build Environment
+        run: cmake -E make_directory ${{github.workspace}}/build
+
+      - name: Configure CMake
+        shell: bash
+        working-directory: ${{github.workspace}}/build
+        run: cmake -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=$BUILD_TYPE $GITHUB_WORKSPACE
+
+      - name: Build
+        working-directory: ${{github.workspace}}/build
+        shell: bash
+        run: cmake --build . --config $BUILD_TYPE

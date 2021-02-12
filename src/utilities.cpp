@@ -94,11 +94,11 @@ void getStateFromServerString(const std::string &string, State &state)
     for (int i = 0; i < 5; ++i) {
         for (int j = 0; j <= 4; ++j) {
             int index = i * 5 + (4 - j);
-            if (string[index] == '1' or string[index] == '2')
+            if (string[index] == '1' || string[index] == '2')
                 state.allPieces[0] |= firstSquare >> count;
-            if (string[index] == '3' or string[index] == '4')
+            if (string[index] == '3' || string[index] == '4')
                 state.allPieces[1] |= firstSquare >> count;
-            if (string[index] == '2' or string[index] == '4')
+            if (string[index] == '2' || string[index] == '4')
                 state.kings |= firstSquare >> count;
             count++;
         }

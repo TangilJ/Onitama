@@ -24,6 +24,7 @@ using json = nlohmann::json;
 
 struct ServerPlayMode : Mode {
     bool printBoardOption{false};
+    bool printReceivedPackets{false};
     bool serverCreateMatch{false};
     bool localServerUrl{false};
     std::string serverMatchId;

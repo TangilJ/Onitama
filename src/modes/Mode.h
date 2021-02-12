@@ -8,7 +8,6 @@
 struct Mode {
     std::vector<std::string> cards = {"", "", "", "", ""};
     int depth = 1;
-    bool printReceivedPackets{false};
     
     virtual void run() = 0;
 };

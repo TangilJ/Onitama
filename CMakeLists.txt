@@ -15,6 +15,8 @@ if (WIN32)
     link_libraries(ws2_32)
 endif ()
 
+set(JSON_BuildTests OFF CACHE INTERNAL "")
+
 add_executable(
         Onitama
         src/main.cpp

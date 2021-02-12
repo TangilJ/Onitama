@@ -3,7 +3,7 @@
 	url = https://github.com/CLIUtils/CLI11.git
 [submodule "extern/easywsclient"]
 	path = extern/easywsclient
-	url = https://github.com/dhbaird/easywsclient.git
+	url = https://github.com/TheBlocks/easywsclient.git
 [submodule "extern/json"]
 	path = extern/json
 	url = https://github.com/nlohmann/json.git

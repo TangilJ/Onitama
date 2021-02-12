@@ -30,10 +30,19 @@ add_executable(
         src/utilities.h
         src/search.cpp
         src/search.h
+
+        src/modes/Mode.h
+        src/modes/PerftMode.cpp
+        src/modes/PerftMode.h
+        src/modes/SelfPlayMode.cpp
+        src/modes/SelfPlayMode.h
+        src/modes/ServerPlayMode.cpp
+        src/modes/ServerPlayMode.h
+        src/modes/HumanPlayMode.cpp
+        src/modes/HumanPlayMode.h
+
         extern/easywsclient/easywsclient.cpp
         extern/easywsclient/easywsclient.hpp
-        src/cli.cpp
-        src/cli.h
 )
 
 add_subdirectory(extern/CLI11)

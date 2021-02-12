@@ -22,8 +22,6 @@ add_executable(
         src/main.cpp
         src/main.h
         src/data.h
-        src/perft.cpp
-        src/perft.h
         src/movegen.cpp
         src/movegen.h
         src/utilities.cpp

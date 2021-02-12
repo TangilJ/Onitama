@@ -34,7 +34,7 @@ int main(int argc, char **argv)
         "Run perft (performance test)."
     )->ignore_case();
     perftSubcommand->add_option("-d,--depth", perftMode.depth, "Perft depth.", true);
-    perftSubcommand->add_flag("-p,--parallel", perftMode.parallelPerft, "Parallelise perft.");
+    perftSubcommand->add_flag("-p,--parallel", perftMode.parallelPerftOption, "Parallelise perft.");
     perftSubcommand->add_flag(
         "-i,--increasing", perftMode.increasingPerft,
         "Make the perft increase depth-by-depth to the given depth."

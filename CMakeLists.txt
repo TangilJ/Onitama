@@ -20,26 +20,25 @@ set(JSON_BuildTests OFF CACHE INTERNAL "")
 add_executable(
         Onitama
 
-        src/main.cpp
-        src/main.h
-        src/data.h
-        src/movegen.cpp
-        src/movegen.h
-        src/utilities.cpp
-        src/utilities.h
-        src/search.cpp
-        src/search.h
+        src/cli/main.cpp
+        src/cli/modes/Mode.h
+        src/cli/modes/PerftMode.cpp
+        src/cli/modes/PerftMode.h
+        src/cli/modes/SelfPlayMode.cpp
+        src/cli/modes/SelfPlayMode.h
+        src/cli/modes/ServerPlayMode.cpp
+        src/cli/modes/ServerPlayMode.h
+        src/cli/modes/HumanPlayMode.cpp
+        src/cli/modes/HumanPlayMode.h
 
-        src/modes/Mode.h
-        src/modes/PerftMode.cpp
-        src/modes/PerftMode.h
-        src/modes/SelfPlayMode.cpp
-        src/modes/SelfPlayMode.h
-        src/modes/ServerPlayMode.cpp
-        src/modes/ServerPlayMode.h
-        src/modes/HumanPlayMode.cpp
-        src/modes/HumanPlayMode.h
-        
+        src/core/data.h
+        src/core/movegen.cpp
+        src/core/movegen.h
+        src/core/utilities.cpp
+        src/core/utilities.h
+        src/core/search.cpp
+        src/core/search.h
+
         test/perfttest.cpp
 
         extern/easywsclient/easywsclient.cpp

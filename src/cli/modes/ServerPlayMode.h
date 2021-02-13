@@ -5,17 +5,17 @@
 #include <cmath>
 #include <easywsclient.hpp>
 #include <nlohmann/json.hpp>
-#include "../types.h"
-#include "../utilities.h"
-#include "../movegen.h"
-#include "../search.h"
-#include "../utilities.h"
+#include "../../core/types.h"
+#include "../../core/utilities.h"
+#include "../../core/movegen.h"
+#include "../../core/search.h"
+#include "../../core/utilities.h"
 #include "Mode.h"
 
 #ifdef _WIN32
 #pragma comment( lib, "ws2_32" )
 
-#include <WinSock2.h>
+#include <winsock2.h>
 #include <iomanip>
 
 #endif

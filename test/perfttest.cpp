@@ -1,7 +1,7 @@
 #define DOCTEST_CONFIG_IMPLEMENT
 
 #include <doctest/doctest.h>
-#include "../src/modes/PerftMode.h"
+#include "../src/cli/modes/PerftMode.h"
 
 
 // Perft values were collected from the Onitama community

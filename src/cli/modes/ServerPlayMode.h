@@ -30,9 +30,14 @@ struct ServerPlayMode : Mode {
     std::string serverMatchId;
     std::string serverUrl = "ws://litama.herokuapp.com";
 
+    void run() override;
+
+private:
     void processJsonState(json j, MoveLookup *lookups, State &state, int &turn, int &color, int &index, bool &firstPacket);
 
-    void run() override;
+    void getStateFromServerString(const std::string &string, State &state);
+
+    std::string serverMoveStringFromStates(State first, State second, std::vector<std::string> names);
 };
 
 

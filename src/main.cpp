@@ -1,4 +1,5 @@
 #include <CLI/CLI.hpp>
+#include <doctest/doctest.h>
 #include "main.h"
 #include "data.h"
 
@@ -140,6 +141,18 @@ int main(int argc, char **argv)
     )->ignore_case();
     litamaServer->callback([&]() {
         serverPlayMode.run();
+    });
+
+
+    CLI::App *tests = app.add_subcommand(
+        "tests",
+        "Run tests to verify the engine is working correctly."
+    )->ignore_case();
+    tests->callback([&]() {
+        doctest::Context context;
+        int res = context.run();
+        if (res != 0)
+            throw CLI::RuntimeError(res);
     });
 
 

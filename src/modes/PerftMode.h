@@ -18,8 +18,6 @@
 
 struct PerftMode : Mode {
 private:
-    unsigned long long perft(State state, int depth, int playerIndex, MoveLookup *lookups);
-
     unsigned long long parallelPerft(State state, int depth, int playerIndex, MoveLookup *lookups);
 
     void printIncreasingPerftSpeed(State state, int depth, int playerIndex, MoveLookup *lookups, bool parallel);
@@ -30,6 +28,7 @@ public:
     bool increasingPerft{false};
     bool parallelPerftOption{false};
     int startingPlayer{0};
+    static unsigned long long perft(State state, int depth, int playerIndex, MoveLookup *lookups);
 
     void run() override;
 };

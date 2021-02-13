@@ -39,6 +39,8 @@ add_executable(
         src/modes/ServerPlayMode.h
         src/modes/HumanPlayMode.cpp
         src/modes/HumanPlayMode.h
+        
+        test/perfttest.cpp
 
         extern/easywsclient/easywsclient.cpp
         extern/easywsclient/easywsclient.hpp

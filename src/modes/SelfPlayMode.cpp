@@ -1,3 +1,4 @@
+#include "../data.h"
 #include "SelfPlayMode.h"
 
 

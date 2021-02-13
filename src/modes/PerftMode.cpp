@@ -91,6 +91,8 @@ void PerftMode::printPerftSpeed(State state, int depth, int playerIndex, MoveLoo
 
     double duration = (std::clock() - start) / (double) CLOCKS_PER_SEC;
     double speed = (double) total / duration / 1000000;
-    printf("Depth %i (%10llu nodes) took %.5ssec = (%.5s Mnodes/sec)\n", depth, total,
-           std::to_string(duration).c_str(), std::to_string(speed).c_str());
+    printf(
+        "Depth %i: %10llu nodes in %6.4ss (%.5s Mnodes/s)\n",
+        depth, total, std::to_string(duration).c_str(), std::to_string(speed).c_str()
+    );
 }

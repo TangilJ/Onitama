@@ -23,11 +23,16 @@ jobs:
         run: cmake -E make_directory ${{github.workspace}}/build
 
       - name: Configure CMake
-        shell: bash
         working-directory: ${{github.workspace}}/build
+        shell: bash
         run: cmake -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=$BUILD_TYPE $GITHUB_WORKSPACE
 
       - name: Build
         working-directory: ${{github.workspace}}/build
         shell: bash
         run: cmake --build . --config $BUILD_TYPE
+
+      - name: Run Tests
+        working-directory: ${{github.workspace}}/build
+        shell: bash
+        run: ./Onitama.exe tests

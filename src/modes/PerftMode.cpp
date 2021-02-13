@@ -2,12 +2,27 @@
 
 void PerftMode::run()
 {
-    printf("Running perft with depth %i\n\n", this->depth);
+    printf("Running ");
+    if (this->increasingPerft)
+        printf("increasing ");
+    if (this->parallelPerftOption)
+        printf("parallel ");
+    printf("perft with depth %i\n\n", this->depth);
 
     if (std::find(this->cards.begin(), this->cards.end(), "") != this->cards.end())
         this->cards = {"ox", "boar", "horse", "elephant", "crab"};
     MoveLookup lookupsArray[5];
     getLookupsFromNames(this->cards, lookupsArray);
+
+    printf(
+        "Perft starting configuration:\n"
+        "blue = %s, %s\n"
+        "red = %s, %s\n"
+        "side = %s\n\n",
+        this->cards[0].c_str(), this->cards[1].c_str(),
+        this->cards[2].c_str(), this->cards[3].c_str(),
+        this->cards[4].c_str()
+    );
 
     State state = {
         {blueStartingBoard, redStartingBoard},

@@ -10,7 +10,7 @@
 #include <algorithm>
 #include <ctime>
 #include <string>
-#include "../main.h"
+#include "../types.h"
 #include "../data.h"
 #include "../utilities.h"
 #include "../movegen.h"

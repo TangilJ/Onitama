@@ -5,7 +5,7 @@
 #include <cmath>
 #include <easywsclient.hpp>
 #include <nlohmann/json.hpp>
-#include "../main.h"
+#include "../types.h"
 #include "../utilities.h"
 #include "../movegen.h"
 #include "../search.h"

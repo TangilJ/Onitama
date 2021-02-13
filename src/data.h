@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <unordered_map>
-#include "main.h"
+#include "types.h"
 
 // Blue is element 0, red is element 1
 

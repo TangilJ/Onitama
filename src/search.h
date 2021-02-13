@@ -1,7 +1,7 @@
 #ifndef ONITAMA_SEARCH_H
 #define ONITAMA_SEARCH_H
 
-#include "main.h"
+#include "types.h"
 
 typedef struct {
     State state;

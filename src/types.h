@@ -1,5 +1,5 @@
-#ifndef ONITAMA_MAIN_H
-#define ONITAMA_MAIN_H
+#ifndef ONITAMA_TYPES_H
+#define ONITAMA_TYPES_H
 
 #include <iostream>
 #include <array>
@@ -28,4 +28,4 @@ struct State {
 using MoveLookup = std::array<std::array<Bitboard, 25>, 2>;
 using StateArray = std::array<State, 40>;
 
-#endif //ONITAMA_MAIN_H
+#endif //ONITAMA_TYPES_H

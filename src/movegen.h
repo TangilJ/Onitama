@@ -1,7 +1,7 @@
 #ifndef ONITAMA_MOVEGEN_H
 #define ONITAMA_MOVEGEN_H
 
-#include "main.h"
+#include "types.h"
 
 Bitboard allMovesForPiece(Bitboard board, MoveLookup &lookup, int playerIndex, int pieceIndex);
 

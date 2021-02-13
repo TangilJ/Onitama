@@ -3,7 +3,7 @@
 
 #include <algorithm>
 #include <cmath>
-#include "../main.h"
+#include "../types.h"
 #include "../utilities.h"
 #include "../movegen.h"
 #include "../search.h"

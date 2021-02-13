@@ -1,6 +1,6 @@
 #include <CLI/CLI.hpp>
 #include <doctest/doctest.h>
-#include "main.h"
+#include "types.h"
 #include "data.h"
 
 #include "modes/Mode.h"

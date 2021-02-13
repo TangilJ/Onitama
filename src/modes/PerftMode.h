@@ -29,6 +29,7 @@ private:
 public:
     bool increasingPerft{false};
     bool parallelPerftOption{false};
+    int startingPlayer{0};
 
     void run() override;
 };

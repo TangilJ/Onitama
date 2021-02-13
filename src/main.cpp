@@ -51,6 +51,10 @@ int main(int argc, char **argv)
         "The 5 cards to be used in perft in order of: blue1, blue2, red1, red2, side. "
         "Defaults to blue = ox, boar, red = horse, elephant, side = crab."
     )->ignore_case()->expected(5)->check(cardNameValidator);
+    perftSubcommand->add_option(
+      "-s,--start", perftMode.startingPlayer,
+      "The index of the player that will start (0 = blue, 1 = red)."
+    )->ignore_case()->check(CLI::Range(0, 1));
     perftSubcommand->callback([&]() {
         perftMode.run();
     });

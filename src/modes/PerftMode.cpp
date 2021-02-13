@@ -18,10 +18,12 @@ void PerftMode::run()
         "Perft starting configuration:\n"
         "blue = %s, %s\n"
         "red = %s, %s\n"
-        "side = %s\n\n",
+        "side = %s\n"
+        "(%s starts)\n\n",
         this->cards[0].c_str(), this->cards[1].c_str(),
         this->cards[2].c_str(), this->cards[3].c_str(),
-        this->cards[4].c_str()
+        this->cards[4].c_str(),
+        this->startingPlayer == 0 ? "blue" : "red"
     );
 
     State state = {
@@ -30,9 +32,9 @@ void PerftMode::run()
     };
 
     if (this->increasingPerft)
-        printIncreasingPerftSpeed(state, this->depth, 0, lookupsArray, this->parallelPerftOption);
+        printIncreasingPerftSpeed(state, this->depth, this->startingPlayer, lookupsArray, this->parallelPerftOption);
     else
-        printPerftSpeed(state, this->depth, 0, lookupsArray, this->parallelPerftOption);
+        printPerftSpeed(state, this->depth, this->startingPlayer, lookupsArray, this->parallelPerftOption);
 }
 
 unsigned long long PerftMode::perft(State state, int depth, int playerIndex, MoveLookup *lookups)

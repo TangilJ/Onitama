@@ -53,8 +53,8 @@ int main(int argc, char **argv)
         "Defaults to blue = ox, boar, red = horse, elephant, side = crab."
     )->ignore_case()->expected(5)->check(cardNameValidator);
     perftSubcommand->add_option(
-      "-s,--start", perftMode.startingPlayer,
-      "The index of the player that will start (0 = blue, 1 = red)."
+        "-s,--start", perftMode.startingPlayer,
+        "The index of the player that will start (0 = blue, 1 = red)."
     )->ignore_case()->check(CLI::Range(0, 1));
     perftSubcommand->callback([&]() {
         perftMode.run();
@@ -146,10 +146,19 @@ int main(int argc, char **argv)
 
     CLI::App *tests = app.add_subcommand(
         "tests",
-        "Run tests to verify the engine is working correctly."
-    )->ignore_case();
+        "Run tests to verify the engine is working correctly.\n"
+        "Write extra command line options after 'tests' to pass them to doctest (e.g. Onitama.exe tests -ltc)."
+    )->ignore_case()->allow_extras();
     tests->callback([&]() {
+        // Remove 'tests' from argv and pass the rest to doctest
+        char *newArgv[argc - 1];
+        newArgv[0] = argv[0];
+        for (int i = 1; i < argc - 1; ++i)
+            newArgv[i] = argv[i + 1];
+
         doctest::Context context;
+        context.applyCommandLine(argc - 1, newArgv);
+
         int res = context.run();
         if (res != 0)
             throw CLI::RuntimeError(res);

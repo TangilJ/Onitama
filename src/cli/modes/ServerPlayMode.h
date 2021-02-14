@@ -5,11 +5,13 @@
 #include <cmath>
 #include <easywsclient.hpp>
 #include <nlohmann/json.hpp>
-#include "../../core/types.h"
-#include "../../core/utilities.h"
-#include "../../core/movegen.h"
-#include "../../core/search.h"
-#include "../../core/utilities.h"
+
+#include <core/types.h>
+#include <core/utilities.h>
+#include <core/movegen.h>
+#include <core/search.h>
+#include <core/utilities.h>
+
 #include "Mode.h"
 
 #ifdef _WIN32

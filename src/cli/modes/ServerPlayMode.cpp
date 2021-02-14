@@ -1,5 +1,5 @@
 #include "ServerPlayMode.h"
-#include "../../core/data.h"
+#include <core/data.h>
 
 using easywsclient::WebSocket;
 

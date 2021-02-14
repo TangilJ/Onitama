@@ -1,5 +1,5 @@
-#include "../../core/data.h"
 #include "SelfPlayMode.h"
+#include <core/data.h>
 
 
 void SelfPlayMode::run()

@@ -31,19 +31,14 @@ add_executable(
         src/cli/modes/HumanPlayMode.cpp
         src/cli/modes/HumanPlayMode.h
 
-        src/core/data.h
-        src/core/movegen.cpp
-        src/core/movegen.h
-        src/core/utilities.cpp
-        src/core/utilities.h
-        src/core/search.cpp
-        src/core/search.h
-
         test/perfttest.cpp
 
         extern/easywsclient/easywsclient.cpp
         extern/easywsclient/easywsclient.hpp
 )
+
+add_subdirectory(src/)
+target_link_libraries(Onitama OnitamaCore)
 
 add_subdirectory(extern/CLI11)
 target_link_libraries(Onitama CLI11::CLI11)

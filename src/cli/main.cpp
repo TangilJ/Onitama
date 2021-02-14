@@ -1,7 +1,8 @@
 #include <CLI/CLI.hpp>
 #include <doctest/doctest.h>
-#include "../core/types.h"
-#include "../core/data.h"
+
+#include <core/types.h>
+#include <core/data.h>
 
 #include "modes/Mode.h"
 #include "modes/PerftMode.h"

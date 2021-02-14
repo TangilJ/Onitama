@@ -10,10 +10,12 @@
 #include <algorithm>
 #include <ctime>
 #include <string>
-#include "../../core/types.h"
-#include "../../core/data.h"
-#include "../../core/utilities.h"
-#include "../../core/movegen.h"
+
+#include <core/types.h>
+#include <core/data.h>
+#include <core/utilities.h>
+#include <core/movegen.h>
+
 #include "Mode.h"
 
 struct PerftMode : Mode {

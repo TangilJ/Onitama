@@ -1,4 +1,8 @@
+#ifdef STANDALONE_TESTS
+#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
+#else
 #define DOCTEST_CONFIG_IMPLEMENT
+#endif
 
 #include <doctest/doctest.h>
 

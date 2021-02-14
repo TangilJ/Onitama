@@ -17,6 +17,13 @@ endif ()
 
 set(JSON_BuildTests OFF CACHE INTERNAL "")
 
+
+add_subdirectory(src/)
+add_subdirectory(extern/CLI11)
+add_subdirectory(extern/json)
+add_subdirectory(extern/doctest)
+
+
 add_executable(
         Onitama
 
@@ -37,16 +44,18 @@ add_executable(
         extern/easywsclient/easywsclient.hpp
 )
 
-add_subdirectory(src/)
 target_link_libraries(Onitama OnitamaCore)
-
-add_subdirectory(extern/CLI11)
 target_link_libraries(Onitama CLI11::CLI11)
-
-add_subdirectory(extern/json)
 target_link_libraries(Onitama nlohmann_json::nlohmann_json)
-
 target_include_directories(Onitama PRIVATE extern/easywsclient)
-
-add_subdirectory(extern/doctest)
 target_link_libraries(Onitama doctest)
+
+
+add_executable(
+        OnitamaTests
+        test/perfttest.cpp
+)
+
+target_compile_definitions(OnitamaTests PRIVATE STANDALONE_TESTS)
+target_link_libraries(OnitamaTests OnitamaCore)
+target_link_libraries(OnitamaTests doctest)

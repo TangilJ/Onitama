@@ -1,7 +1,24 @@
 #include "ServerPlayMode.h"
+
+#include <algorithm>
+#include <cmath>
+#include <easywsclient.hpp>
+
+#ifdef _WIN32
+#pragma comment( lib, "ws2_32" )
+
+#include <winsock2.h>
+#include <iomanip>
+
+#endif
+
 #include <core/data.h>
+#include <core/utilities.h>
+#include <core/search.h>
+
 
 using easywsclient::WebSocket;
+
 
 void ServerPlayMode::run()
 {
@@ -179,7 +196,6 @@ void ServerPlayMode::processJsonState(
         state.kings |= 1 << index;
     }
 }
-
 
 
 void ServerPlayMode::getStateFromServerString(const std::string &string, State &state)

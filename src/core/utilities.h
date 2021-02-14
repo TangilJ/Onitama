@@ -1,6 +1,7 @@
 #ifndef ONITAMA_UTILITIES_H
 #define ONITAMA_UTILITIES_H
 
+#include <vector>
 #include "types.h"
 
 void printBits(Bitboard board);

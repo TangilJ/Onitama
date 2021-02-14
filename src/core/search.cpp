@@ -1,8 +1,11 @@
+#include "search.h"
+
 #include <intrin.h>
 #include <cmath>
+
 #include "data.h"
-#include "search.h"
 #include "movegen.h"
+
 
 float negamaxHeuristic(State state, MoveLookup *lookups)
 {

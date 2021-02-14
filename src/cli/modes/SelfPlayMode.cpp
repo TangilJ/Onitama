@@ -1,5 +1,12 @@
 #include "SelfPlayMode.h"
+
+#include <algorithm>
+#include <cmath>
+
 #include <core/data.h>
+#include <core/utilities.h>
+#include <core/movegen.h>
+#include <core/search.h>
 
 
 void SelfPlayMode::run()

@@ -1,26 +1,11 @@
 #ifndef ONITAMA_SERVERPLAYMODE_H
 #define ONITAMA_SERVERPLAYMODE_H
 
-#include <algorithm>
-#include <cmath>
-#include <easywsclient.hpp>
 #include <nlohmann/json.hpp>
-
 #include <core/types.h>
-#include <core/utilities.h>
-#include <core/movegen.h>
-#include <core/search.h>
-#include <core/utilities.h>
 
 #include "Mode.h"
 
-#ifdef _WIN32
-#pragma comment( lib, "ws2_32" )
-
-#include <winsock2.h>
-#include <iomanip>
-
-#endif
 
 using json = nlohmann::json;
 

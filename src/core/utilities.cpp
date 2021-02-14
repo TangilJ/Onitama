@@ -1,10 +1,12 @@
+#include "utilities.h"
+
+#include <algorithm>
 #include <cstdlib>
 #include <bitset>
 #include <intrin.h>
-#include <vector>
 #include <iterator>
-#include <algorithm>
-#include "utilities.h"
+#include <vector>
+
 #include "data.h"
 
 void printBits(Bitboard board)

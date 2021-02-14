@@ -2,7 +2,6 @@
 #define ONITAMA_MODE_H
 
 #include <iostream>
-#include <array>
 #include <vector>
 
 struct Mode {

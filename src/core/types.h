@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <array>
-#include <vector>
+
 
 using Bitboard = uint32_t;
 

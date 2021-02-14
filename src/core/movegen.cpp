@@ -1,6 +1,6 @@
+#include "movegen.h"
 #include <intrin.h>
 #include "data.h"
-#include "movegen.h"
 
 Bitboard allMovesForPiece(Bitboard board, MoveLookup &lookup, int playerIndex, int pieceIndex)
 {

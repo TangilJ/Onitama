@@ -1,7 +1,10 @@
 #define DOCTEST_CONFIG_IMPLEMENT
 
 #include <doctest/doctest.h>
-#include "../src/cli/modes/PerftMode.h"
+
+#include <core/data.h>
+#include <core/perft.h>
+#include <core/utilities.h>
 
 
 // Perft values were collected from the Onitama community
@@ -18,7 +21,7 @@ void runPerftChecks(std::vector<std::string> cards, int startingPlayerIndex, std
     };
 
     for (int i = 0; i < perftValues.size(); ++i) {
-        CHECK(PerftMode::perft(state, i + 1, startingPlayerIndex, lookupsArray) == perftValues[i]);
+        CHECK(perft(state, i + 1, startingPlayerIndex, lookupsArray) == perftValues[i]);
     }
 }
 

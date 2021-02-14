@@ -13,5 +13,7 @@ add_library(
         core/utilities.h
         core/search.cpp
         core/search.h
+        core/perft.h
+        core/perft.cpp
 )
 target_include_directories(OnitamaCore INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>)

@@ -139,7 +139,12 @@ void ServerPlayMode::run()
                     puts("Final board:");
                     printBoard(state);
                 }
-                std::cout << "Game ended" << std::endl;
+                std::cout << "Game ended. ";
+                if (data.at("winner") == "blue" && color == 0 || data.at("winner") == "red" && color == 1)
+                    std::cout << "Won game." << std::endl;
+                else
+                    std::cout << "Lost game." << std::endl;
+                    
                 break;
             }
         }

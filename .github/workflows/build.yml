@@ -35,4 +35,4 @@ jobs:
       - name: Run Tests
         working-directory: ${{github.workspace}}/build
         shell: bash
-        run: ./Onitama.exe tests
+        run: ./OnitamaTests.exe

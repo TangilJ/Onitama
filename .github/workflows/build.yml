@@ -4,13 +4,29 @@ on: [ push ]
 
 env:
   BUILD_TYPE: Release
-  CC: C:/msys64/mingw64/bin/gcc.exe
-  CXX: C:/msys64/mingw64/bin/g++.exe
 
 jobs:
   build:
-    name: Windows Mingw-w64 GCC
+    name: Windows Mingw-w64 ${{ matrix.config.name }}
     runs-on: windows-latest
+
+    strategy:
+      matrix:
+        config:
+          - {
+            name: "GCC",
+            cc: "C:/msys64/mingw64/bin/gcc.exe",
+            cxx: "C:/msys64/mingw64/bin/g++.exe"
+          }
+          - {
+            name: "Clang",
+            cc: "C:/msys64/mingw64/bin/clang.exe",
+            cxx: "C:/msys64/mingw64/bin/clang++.exe"
+          }
+
+    env:
+      CC: ${{ matrix.config.cc }}
+      CXX: ${{ matrix.config.cxx }}
 
     steps:
       - name: Checkout Repository

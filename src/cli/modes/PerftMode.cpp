@@ -1,11 +1,5 @@
 #include "PerftMode.h"
 
-// GCC doesn't support <execution> without relying on Intel TBB, so we'll just
-// disable anything parallel if the compiler being used is GCC.
-#ifndef __GNUC__
-#include <execution>
-#endif
-
 #include <algorithm>
 #include <ctime>
 #include <string>

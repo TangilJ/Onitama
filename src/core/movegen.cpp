@@ -114,9 +114,9 @@ int checkWinCondition(State state)
     Bitboard kings = state.kings & boardMask;
     if (_mm_popcnt_u32(kings) != 2)
         return _mm_popcnt_u32(kings & state.allPieces[1]);
-    if (state.allPieces[0] & state.kings & 0b00000000000000000000001000000000)
+    if (state.allPieces[0] & state.kings & redStartingSquare)
         return 0;
-    if (state.allPieces[1] & state.kings & 0b00100000000000000000000000000000)
+    if (state.allPieces[1] & state.kings & blueStartingSquare)
         return 1;
     return -1;
 }

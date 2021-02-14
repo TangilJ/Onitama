@@ -36,18 +36,18 @@ SearchValue negamaxWithAbPruning(State state, MoveLookup *lookups, float alpha, 
 {
     if (depth == 0 || checkWinCondition(state) != -1) {
         int colorMultiplier = color == 0 ? 1 : -1;
-        float heuristicValue = (float) negamaxHeuristic(state, lookups) * colorMultiplier;
-        return {state, heuristicValue};
+        float evaluation = (float) negamaxHeuristic(state, lookups) * colorMultiplier;
+        return {state, evaluation};
     }
 
-    StateArray array;
-    int stateSize = nextStatesForBoard(state, lookups, color, array);
+    StateArray states;
+    int stateSize = nextStatesForBoard(state, lookups, color, states);
 
     float bestValue = -INFINITY;
     State bestState;
 
     for (int i = 0; i < stateSize; ++i) {
-        SearchValue nextDepthNegamax = negamaxWithAbPruning(array[i], lookups, -beta, -alpha, depth - 1, 1 - color, false);
+        SearchValue nextDepthNegamax = negamaxWithAbPruning(states[i], lookups, -beta, -alpha, depth - 1, 1 - color, false);
 
         if (bestValue < -nextDepthNegamax.value) {
             bestValue = -nextDepthNegamax.value;

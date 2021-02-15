@@ -54,7 +54,7 @@ void ServerPlayMode::run()
     else if (!this->serverMatchId.empty()) {
         const std::basic_string<char> &message = "join " + this->serverMatchId + " Bot";
         ws->send(message);
-        printf("Sent: %s", message.c_str());
+        printf("Sent: %s\n", message.c_str());
     }
     else {
         puts("Did not enter -c or -i for server subcommand. Type 'Onitama.exe server --help' to see this->");

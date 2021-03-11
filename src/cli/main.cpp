@@ -1,3 +1,7 @@
+static const unsigned VERSION_MAJOR = 1;
+static const unsigned VERSION_MINOR = 0;
+static const unsigned VERSION_REVISION = 0;
+
 #include <CLI/CLI.hpp>
 #include <doctest/doctest.h>
 
@@ -164,6 +168,14 @@ int main(int argc, char **argv)
         if (res != 0)
             throw CLI::RuntimeError(res);
     });
+
+
+    auto version = [](int _) { std::cout << VERSION_MAJOR << '.' << VERSION_MINOR << '.' << VERSION_REVISION; };
+    app.add_flag_function(
+        "-v,--version",
+        version,
+        "Print engine version."
+    )->ignore_case();
 
 
     app.footer("Run --help on a subcommand to see its options.\n"
